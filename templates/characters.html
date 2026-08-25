@@ -44,15 +44,48 @@
 
         </div>
 
-        <div class="card">
+        <a
+            class="button new-character-button"
+            href="/characters/new"
+        >
+            + Новый персонаж
+        </a>
 
-            <h2>Пока пусто</h2>
+        {{if .Characters}}
 
-            <p>
-                Здесь скоро появятся твои персонажи.
-            </p>
+            <div class="character-list">
 
-        </div>
+                {{range .Characters}}
+
+                    <div class="card character-card">
+
+                        <h2>
+                            {{.Name}}
+                        </h2>
+
+                        <p>
+                            Уровень {{.Level}}
+                        </p>
+
+                    </div>
+
+                {{end}}
+
+            </div>
+
+        {{else}}
+
+            <div class="card empty-state">
+
+                <h2>Персонажей пока нет</h2>
+
+                <p>
+                    Создай первый лист персонажа.
+                </p>
+
+            </div>
+
+        {{end}}
 
     </main>
 

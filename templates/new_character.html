@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Новый персонаж — WWN Character Sheet</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a
+            class="back-link"
+            href="/characters"
+        >
+            ← Персонажи
+        </a>
+
+        <h1>Новый персонаж</h1>
+
+        <p class="subtitle">
+            Создание нового листа персонажа.
+        </p>
+
+        {{if .Error}}
+
+            <div class="message error">
+                {{.Error}}
+            </div>
+
+        {{end}}
+
+        <form
+            class="card form"
+            method="post"
+            action="/characters/new"
+        >
+
+            <label for="name">
+                Имя персонажа
+            </label>
+
+            <input
+                id="name"
+                name="name"
+                type="text"
+                value="{{.Name}}"
+                maxlength="100"
+                autocomplete="off"
+                autofocus
+                required
+            >
+
+            <button type="submit">
+                Создать персонажа
+            </button>
+
+        </form>
+
+    </main>
+
+</body>
+</html>

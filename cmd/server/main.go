@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/MinunJuttu/wwn_csw/internal/auth"
+	"github.com/MinunJuttu/wwn_csw/internal/character"
 	"github.com/MinunJuttu/wwn_csw/internal/database"
 	"github.com/MinunJuttu/wwn_csw/internal/session"
 	"github.com/MinunJuttu/wwn_csw/internal/user"
@@ -22,8 +23,9 @@ type contextKey string
 const userContextKey contextKey = "user"
 
 type application struct {
-	users    *user.Store
-	sessions *session.Store
+	users      *user.Store
+	sessions   *session.Store
+	characters *character.Store
 }
 
 type registerPageData struct {
@@ -38,7 +40,13 @@ type loginPageData struct {
 }
 
 type charactersPageData struct {
-	Username string
+	Username   string
+	Characters []character.Character
+}
+
+type newCharacterPageData struct {
+	Name  string
+	Error string
 }
 
 var usernamePattern = regexp.MustCompile(
@@ -60,8 +68,9 @@ func main() {
 	)
 
 	app := &application{
-		users:    user.NewStore(db),
-		sessions: session.NewStore(db),
+		users:      user.NewStore(db),
+		sessions:   session.NewStore(db),
+		characters: character.NewStore(db),
 	}
 
 	mux := http.NewServeMux()
@@ -102,6 +111,13 @@ func main() {
 		"/characters",
 		app.requireAuth(
 			app.charactersHandler,
+		),
+	)
+
+	mux.HandleFunc(
+		"/characters/new",
+		app.requireAuth(
+			app.newCharacterHandler,
 		),
 	)
 
@@ -522,14 +538,152 @@ func (app *application) charactersHandler(
 		return
 	}
 
+	characters, err :=
+		app.characters.ListByUserID(
+			u.ID,
+		)
+
+	if err != nil {
+		log.Printf(
+			"list characters error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
 	data := charactersPageData{
-		Username: u.Username,
+		Username:   u.Username,
+		Characters: characters,
 	}
 
 	renderTemplate(
 		w,
 		"templates/characters.html",
 		data,
+	)
+}
+
+func (app *application) newCharacterHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	switch r.Method {
+
+	case http.MethodGet:
+		renderTemplate(
+			w,
+			"templates/new_character.html",
+			newCharacterPageData{},
+		)
+
+	case http.MethodPost:
+		app.newCharacterPost(w, r)
+
+	default:
+		w.Header().Set(
+			"Allow",
+			"GET, POST",
+		)
+
+		http.Error(
+			w,
+			"Method Not Allowed",
+			http.StatusMethodNotAllowed,
+		)
+	}
+}
+
+func (app *application) newCharacterPost(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(
+			w,
+			"Bad Request",
+			http.StatusBadRequest,
+		)
+
+		return
+	}
+
+	name := strings.TrimSpace(
+		r.PostForm.Get("name"),
+	)
+
+	data := newCharacterPageData{
+		Name: name,
+	}
+
+	if len([]rune(name)) < 1 {
+		data.Error = "Укажи имя персонажа."
+
+		renderTemplate(
+			w,
+			"templates/new_character.html",
+			data,
+		)
+
+		return
+	}
+
+	if len([]rune(name)) > 100 {
+		data.Error = "Имя персонажа слишком длинное."
+
+		renderTemplate(
+			w,
+			"templates/new_character.html",
+			data,
+		)
+
+		return
+	}
+
+	u, ok := currentUser(r)
+
+	if !ok {
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	_, err = app.characters.Create(
+		u.ID,
+		name,
+	)
+
+	if err != nil {
+		log.Printf(
+			"create character error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	http.Redirect(
+		w,
+		r,
+		"/characters",
+		http.StatusSeeOther,
 	)
 }
 

@@ -177,3 +177,35 @@ button:hover,
 .page-header .subtitle {
     margin-bottom: 0;
 }
+
+.new-character-button {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.character-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.character-card h2 {
+    margin: 0;
+}
+
+.character-card p {
+    margin-bottom: 0;
+
+    color: #666;
+}
+
+.empty-state {
+    margin-top: 4px;
+}
+
+.empty-state p {
+    margin-bottom: 0;
+
+    color: #666;
+}
