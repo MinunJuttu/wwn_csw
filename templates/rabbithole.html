@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rabbithole — WWN</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin-login-page">
+    <main class="admin-login-card">
+        <div class="rabbit-mark">◯</div>
+        <h1>Rabbithole</h1>
+        <p class="admin-muted">Введите мастерский пароль.</p>
+
+        {{if .Error}}
+            <div class="admin-message admin-message-error">{{.Error}}</div>
+        {{end}}
+
+        <form method="post" action="/rabbithole" class="admin-login-form">
+            <label for="password">Пароль</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                autofocus
+                required
+            >
+            <button type="submit" class="admin-primary-button">Войти</button>
+        </form>
+    </main>
+</body>
+</html>

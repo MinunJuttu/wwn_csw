@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/MinunJuttu/wwn_csw/internal/adminpanel"
 	"github.com/MinunJuttu/wwn_csw/internal/auth"
 	"github.com/MinunJuttu/wwn_csw/internal/character"
 	"github.com/MinunJuttu/wwn_csw/internal/config"
@@ -100,6 +101,18 @@ func main() {
 		characters: character.NewStore(db),
 	}
 
+	adminPanel, err := adminpanel.New(
+		app.characters,
+		cfg.AdminPassword,
+		cfg.SecureCookies,
+	)
+	if err != nil {
+		log.Fatalf(
+			"admin panel init error: %v",
+			err,
+		)
+	}
+
 	mux := http.NewServeMux()
 
 	staticFiles := http.FileServer(
@@ -154,6 +167,8 @@ func main() {
 			app.characterHandler,
 		),
 	)
+
+	adminPanel.Register(mux)
 
 	server := &http.Server{
 		Addr:              cfg.ServerAddress,
@@ -1210,36 +1225,37 @@ func (app *application) characterPost(
 		},
 	}
 
-	for i := 0; i < character.DefaultFociRows; i++ {
+	for i := 0; i < character.MaxFociRows; i++ {
+		name := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("focus_name_%d", i),
+			),
+		)
+
+		level := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("focus_level_%d", i),
+			),
+		)
+
+		description := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("focus_description_%d", i),
+			),
+		)
+
+		if name == "" &&
+			level == "" &&
+			description == "" {
+			continue
+		}
+
 		sheet.Foci = append(
 			sheet.Foci,
 			character.Focus{
-				Name: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"focus_name_%d",
-							i,
-						),
-					),
-				),
-
-				Level: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"focus_level_%d",
-							i,
-						),
-					),
-				),
-
-				Description: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"focus_description_%d",
-							i,
-						),
-					),
-				),
+				Name:        name,
+				Level:       level,
+				Description: description,
 			},
 		)
 	}
@@ -1542,6 +1558,41 @@ func (app *application) characterPost(
 			"?saved=1",
 		http.StatusSeeOther,
 	)
+
+	if r.PostForm.Get("action") == "delete" {
+		currentUser, ok := currentUser(r)
+		if !ok {
+			http.Error(
+				w,
+				"Пользователь не найден",
+				http.StatusUnauthorized,
+			)
+			return
+		}
+
+		err := app.characters.Delete(
+			characterID,
+			currentUser.ID,
+		)
+
+		if err != nil {
+			http.Error(
+				w,
+				"Не удалось удалить персонажа",
+				http.StatusInternalServerError,
+			)
+			return
+		}
+
+		http.Redirect(
+			w,
+			r,
+			"/characters",
+			http.StatusSeeOther,
+		)
+
+		return
+	}
 }
 
 func (app *application) requireAuth(

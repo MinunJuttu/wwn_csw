@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{.Character.Name}} — Админка WWN</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="{{if .Embed}}admin-character-embed{{else}}admin-page{{end}}">
+    <main class="admin-character-view">
+        {{if not .Embed}}
+            <div class="admin-character-view-nav">
+                <a class="admin-back-link" href="/admin/characters">← Все персонажи</a>
+                <form
+                    method="post"
+                    action="/admin/characters/{{.Character.ID}}/delete"
+                    onsubmit="return confirm('Удалить персонажа «{{.Character.Name}}» игрока {{.Character.OwnerUsername}}? Это действие нельзя отменить.')"
+                >
+                    <button class="admin-delete-button" type="submit">Удалить персонажа</button>
+                </form>
+            </div>
+        {{end}}
+
+        <header class="admin-sheet-hero">
+            <div>
+                <div class="admin-sheet-owner">Игрок: {{.Character.OwnerUsername}}</div>
+                <h1>{{.Character.Name}}</h1>
+                <div class="admin-sheet-subtitle">
+                    Уровень {{.Character.Level}}
+                    {{if .Character.Class}} · {{.Character.Class}}{{end}}
+                    {{if .Sheet.XP}} · XP {{.Sheet.XP}}{{end}}
+                </div>
+            </div>
+        </header>
+
+        <section class="admin-sheet-section">
+            <h2>Характеристики</h2>
+            <div class="admin-stat-grid admin-stat-grid-6">
+                <div class="admin-stat"><span>СИЛ</span><strong>{{.Sheet.Attributes.Strength}}</strong><small>{{.Sheet.Attributes.StrengthMod}}</small></div>
+                <div class="admin-stat"><span>ЛОВ</span><strong>{{.Sheet.Attributes.Dexterity}}</strong><small>{{.Sheet.Attributes.DexterityMod}}</small></div>
+                <div class="admin-stat"><span>ТЕЛ</span><strong>{{.Sheet.Attributes.Constitution}}</strong><small>{{.Sheet.Attributes.ConstitutionMod}}</small></div>
+                <div class="admin-stat"><span>ИНТ</span><strong>{{.Sheet.Attributes.Intelligence}}</strong><small>{{.Sheet.Attributes.IntelligenceMod}}</small></div>
+                <div class="admin-stat"><span>МДР</span><strong>{{.Sheet.Attributes.Wisdom}}</strong><small>{{.Sheet.Attributes.WisdomMod}}</small></div>
+                <div class="admin-stat"><span>ХАР</span><strong>{{.Sheet.Attributes.Charisma}}</strong><small>{{.Sheet.Attributes.CharismaMod}}</small></div>
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Здоровье и бой</h2>
+            <div class="admin-kv-grid">
+                <div><span>HP</span><strong>{{.Sheet.HP.Current}} / {{.Sheet.HP.Max}}</strong></div>
+                <div><span>Истощение</span><strong>{{.Sheet.SystemStrain.Current}} / {{.Sheet.SystemStrain.Max}}</strong></div>
+                <div><span>Бонус атаки</span><strong>{{.Sheet.Combat.BaseAttackBonus}}</strong></div>
+                <div><span>Ближний бой</span><strong>{{.Sheet.Combat.MeleeAttack}}</strong></div>
+                <div><span>Дальний бой</span><strong>{{.Sheet.Combat.RangedAttack}}</strong></div>
+                <div><span>Инициатива</span><strong>{{.Sheet.Combat.Initiative}}</strong></div>
+                <div><span>Класс брони</span><strong>{{.Sheet.Armor.AC}}</strong></div>
+                <div><span>Надетая броня</span><strong>{{.Sheet.Armor.WornArmor}}</strong></div>
+            </div>
+            {{if .Sheet.Armor.Special}}
+                <div class="admin-readonly-note"><strong>Особые свойства брони:</strong> {{.Sheet.Armor.Special}}</div>
+            {{end}}
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Спасброски</h2>
+            <div class="admin-kv-grid">
+                <div><span>Стойкость</span><strong>{{.Sheet.Saves.Physical}}</strong></div>
+                <div><span>Уклонение</span><strong>{{.Sheet.Saves.Evasion}}</strong></div>
+                <div><span>Воля</span><strong>{{.Sheet.Saves.Mental}}</strong></div>
+                <div><span>Удача</span><strong>{{.Sheet.Saves.Luck}}</strong></div>
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <div class="admin-section-heading-row">
+                <h2>Навыки</h2>
+                <div class="admin-inline-meta">
+                    {{if .Sheet.SkillPoints}}ОН: {{.Sheet.SkillPoints}}{{end}}
+                    {{if .Sheet.ExpertPoints}} · ОН Эксперта: {{.Sheet.ExpertPoints}}{{end}}
+                </div>
+            </div>
+            <div class="admin-skills-grid">
+                <div><span>Администрирование</span><strong>{{.Sheet.Skills.Administer}}</strong></div>
+                <div><span>Связи</span><strong>{{.Sheet.Skills.Connect}}</strong></div>
+                <div><span>Убеждение</span><strong>{{.Sheet.Skills.Convince}}</strong></div>
+                <div><span>Ремесло</span><strong>{{.Sheet.Skills.Craft}}</strong></div>
+                <div><span>Атлетика</span><strong>{{.Sheet.Skills.Exert}}</strong></div>
+                <div><span>Лечение</span><strong>{{.Sheet.Skills.Heal}}</strong></div>
+                <div><span>Знания</span><strong>{{.Sheet.Skills.Know}}</strong></div>
+                <div><span>Лидерство</span><strong>{{.Sheet.Skills.Lead}}</strong></div>
+                <div><span>Магия</span><strong>{{.Sheet.Skills.Magic}}</strong></div>
+                <div><span>Внимание</span><strong>{{.Sheet.Skills.Notice}}</strong></div>
+                <div><span>Выступление</span><strong>{{.Sheet.Skills.Perform}}</strong></div>
+                <div><span>Религия</span><strong>{{.Sheet.Skills.Pray}}</strong></div>
+                <div><span>Рукопашный бой</span><strong>{{.Sheet.Skills.Punch}}</strong></div>
+                <div><span>Верховая езда</span><strong>{{.Sheet.Skills.Ride}}</strong></div>
+                <div><span>Мореплавание</span><strong>{{.Sheet.Skills.Sail}}</strong></div>
+                <div><span>Стрельба</span><strong>{{.Sheet.Skills.Shoot}}</strong></div>
+                <div><span>Скрытность</span><strong>{{.Sheet.Skills.Sneak}}</strong></div>
+                <div><span>Фехтование</span><strong>{{.Sheet.Skills.Stab}}</strong></div>
+                <div><span>Выживание</span><strong>{{.Sheet.Skills.Survive}}</strong></div>
+                <div><span>Торговля</span><strong>{{.Sheet.Skills.Trade}}</strong></div>
+                <div><span>{{if .Sheet.Skills.WorkName}}{{.Sheet.Skills.WorkName}}{{else}}Работа{{end}}</span><strong>{{.Sheet.Skills.Work}}</strong></div>
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Оружие</h2>
+            <div class="admin-record-list">
+                {{range .Sheet.Weapons}}
+                    {{if or .Name .HitBonus .Damage .Range .SpecialShock}}
+                        <div class="admin-record-card">
+                            <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                            <div class="admin-record-meta">
+                                {{if .HitBonus}}Атака: {{.HitBonus}}{{end}}
+                                {{if .Damage}} · Урон: {{.Damage}}{{end}}
+                                {{if .Range}} · Дальность: {{.Range}}{{end}}
+                            </div>
+                            {{if .SpecialShock}}<p>{{.SpecialShock}}</p>{{end}}
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+            {{if .Sheet.Ammunition}}<div class="admin-readonly-note"><strong>Боеприпасы:</strong> {{.Sheet.Ammunition}}</div>{{end}}
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Черты</h2>
+            <div class="admin-record-list">
+                {{range .Sheet.Foci}}
+                    {{if or .Name .Level .Description}}
+                        <div class="admin-record-card">
+                            <div class="admin-record-title-row">
+                                <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                                {{if .Level}}<span>Уровень {{.Level}}</span>{{end}}
+                            </div>
+                            {{if .Description}}<p>{{.Description}}</p>{{end}}
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Заклинания</h2>
+            <div class="admin-record-list">
+                {{range .Sheet.Spells}}
+                    {{if or .Name .Tradition .Level .Description}}
+                        <div class="admin-record-card">
+                            <div class="admin-record-title-row">
+                                <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                                {{if .Level}}<span>Уровень {{.Level}}</span>{{end}}
+                            </div>
+                            {{if .Tradition}}<div class="admin-record-meta">Традиция: {{.Tradition}}</div>{{end}}
+                            {{if .Description}}<p>{{.Description}}</p>{{end}}
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Магические искусства</h2>
+
+            <h3 class="admin-subheading">Традиции и усилия</h3>
+            <div class="admin-record-list">
+                {{range .Sheet.MagicTraditions}}
+                    {{if or .Name .EffortMax .EffortCurrent}}
+                        <div class="admin-record-card admin-tradition-card">
+                            <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                            <span>Усилия: {{.EffortCurrent}} / {{.EffortMax}}</span>
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+
+            <h3 class="admin-subheading">Искусства</h3>
+            <div class="admin-record-list">
+                {{range .Sheet.MagicArts}}
+                    {{if or .Name .Tradition .EffortSpentOn .Description}}
+                        <div class="admin-record-card">
+                            <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                            <div class="admin-record-meta">
+                                {{if .Tradition}}Традиция: {{.Tradition}}{{end}}
+                                {{if .EffortSpentOn}} · Усилие: {{.EffortSpentOn}}{{end}}
+                            </div>
+                            {{if .Description}}<p>{{.Description}}</p>{{end}}
+                        </div>
+                    {{end}}
+                {{end}}
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Инвентарь</h2>
+            <div class="admin-inventory-columns">
+                <div>
+                    <h3>Подготовленные · макс. {{.Sheet.ReadiedMaxLoad}}</h3>
+                    <div class="admin-inventory-list">
+                        {{range .Sheet.ReadiedItems}}
+                            {{if or .Name .Encumbrance}}
+                                <div class="admin-inventory-item {{if .Disabled}}is-disabled{{end}}">
+                                    <span>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</span>
+                                    <strong>{{.Encumbrance}}</strong>
+                                </div>
+                            {{end}}
+                        {{end}}
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Рюкзак · макс. {{.Sheet.StowedMaxLoad}}</h3>
+                    <div class="admin-inventory-list">
+                        {{range .Sheet.StowedItems}}
+                            {{if or .Name .Encumbrance}}
+                                <div class="admin-inventory-item {{if .Disabled}}is-disabled{{end}}">
+                                    <span>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</span>
+                                    <strong>{{.Encumbrance}}</strong>
+                                </div>
+                            {{end}}
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Имущество</h2>
+            <div class="admin-kv-grid">
+                <div><span>Серебро</span><strong>{{.Sheet.Property.Silver}}</strong></div>
+                <div><span>Золото</span><strong>{{.Sheet.Property.Gold}}</strong></div>
+            </div>
+            {{if .Sheet.Property.StoredPossessions}}
+                <div class="admin-long-text"><strong>Вещи на хранении</strong><p>{{.Sheet.Property.StoredPossessions}}</p></div>
+            {{end}}
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>Предыстория и способности</h2>
+            {{if .Sheet.Background}}<div class="admin-long-text"><strong>Предыстория</strong><p>{{.Sheet.Background}}</p></div>{{end}}
+            {{if .Sheet.BackgroundDetails}}<div class="admin-long-text"><strong>Подробности</strong><p>{{.Sheet.BackgroundDetails}}</p></div>{{end}}
+            {{if .Sheet.Benefits}}<div class="admin-long-text"><strong>Способности класса</strong><p>{{.Sheet.Benefits}}</p></div>{{end}}
+        </section>
+
+        <section class="admin-sheet-section">
+            <h2>О персонаже</h2>
+            <div class="admin-kv-grid">
+                <div><span>Игрок</span><strong>{{.Sheet.Player}}</strong></div>
+                <div><span>Родина</span><strong>{{.Sheet.Homeland}}</strong></div>
+                <div><span>Род занятий</span><strong>{{.Sheet.Occupation}}</strong></div>
+                <div><span>Раса / Вид</span><strong>{{.Sheet.RaceSpecies}}</strong></div>
+                <div><span>Цель</span><strong>{{.Sheet.Goal}}</strong></div>
+            </div>
+            {{if .Sheet.Description}}<div class="admin-long-text"><strong>Описание</strong><p>{{.Sheet.Description}}</p></div>{{end}}
+            {{if .Sheet.SketchOrSigil}}<div class="admin-long-text"><strong>Заметки</strong><p>{{.Sheet.SketchOrSigil}}</p></div>{{end}}
+        </section>
+    </main>
+</body>
+</html>

@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     setupDynamicList({
+        listID: "foci-list",
+        templateID: "focus-template",
+        buttonID: "add-focus",
+        maxItems: 10,
+        maxText: "Максимум 10 черт",
+    });
+
+    setupDynamicList({
         listID: "spells-list",
         templateID: "spell-template",
         buttonID: "add-spell",
@@ -19,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         listID: "magic-traditions-list",
         templateID: "magic-tradition-template",
         buttonID: "add-magic-tradition",
-        maxItems: 50,
-        maxText: "Достигнут максимум традиций",
+        maxItems: 5,
+        maxText: "Максимум 5 традиций",
     });
 });
 
@@ -34,56 +42,149 @@ function setupDynamicList({
 }) {
     const list = document.getElementById(listID);
     const template = document.getElementById(templateID);
-    const button = document.getElementById(buttonID);
+    const addButton = document.getElementById(buttonID);
 
-    if (!list || !template || !button) {
+    if (!list || !template || !addButton) {
         return;
     }
 
-    let nextIndex = Number(
-        list.dataset.nextIndex || 0
-    );
+    const normalButtonText =
+        addButton.textContent.trim();
 
-    updateButton();
 
-    button.addEventListener("click", () => {
-        if (nextIndex >= maxItems) {
+    function getEntries() {
+        return Array.from(
+            list.querySelectorAll(":scope > .dynamic-entry")
+        );
+    }
+
+
+    function reindexEntries() {
+        const entries = getEntries();
+
+        entries.forEach((entry, index) => {
+            const fields =
+                entry.querySelectorAll("[name]");
+
+            fields.forEach((field) => {
+                field.name = field.name.replace(
+                    /_\d+$/,
+                    `_${index}`
+                );
+            });
+        });
+
+        updateControls();
+    }
+
+
+    function updateControls() {
+        const entries = getEntries();
+        const count = entries.length;
+
+        addButton.disabled = count >= maxItems;
+
+        addButton.textContent =
+            count >= maxItems
+                ? maxText
+                : normalButtonText;
+
+
+        entries.forEach((entry) => {
+            const removeButton =
+                entry.querySelector(
+                    ".remove-entry-button"
+                );
+
+            if (!removeButton) {
+                return;
+            }
+
+            removeButton.disabled =
+                count <= 1;
+        });
+    }
+
+
+    addButton.addEventListener("click", () => {
+        const entries = getEntries();
+
+        if (entries.length >= maxItems) {
             return;
         }
 
-        const html = template.innerHTML.replaceAll(
-            "__INDEX__",
-            String(nextIndex)
-        );
+        const index = entries.length;
+
+        const html =
+            template.innerHTML.replaceAll(
+                "__INDEX__",
+                String(index)
+            );
 
         list.insertAdjacentHTML(
             "beforeend",
             html
         );
 
-        nextIndex++;
+        reindexEntries();
 
-        updateButton();
+        const newEntry =
+            getEntries().at(-1);
 
-        const lastEntry = list.lastElementChild;
-
-        if (lastEntry) {
-            const firstInput =
-                lastEntry.querySelector(
+        if (newEntry) {
+            const firstField =
+                newEntry.querySelector(
                     "input, textarea"
                 );
 
-            if (firstInput) {
-                firstInput.focus();
+            if (firstField) {
+                firstField.focus();
             }
         }
     });
 
 
-    function updateButton() {
-        if (nextIndex >= maxItems) {
-            button.disabled = true;
-            button.textContent = maxText;
+    list.addEventListener("click", (event) => {
+        const removeButton =
+            event.target.closest(
+                ".remove-entry-button"
+            );
+
+        if (!removeButton) {
+            return;
         }
-    }
+
+        const entries = getEntries();
+
+        if (entries.length <= 1) {
+            return;
+        }
+
+        const entry =
+            removeButton.closest(
+                ".dynamic-entry"
+            );
+
+        if (!entry) {
+            return;
+        }
+
+        entry.remove();
+
+        reindexEntries();
+    });
+
+
+    /*
+        Это особенно важно для старых
+        сохранённых персонажей.
+
+        Если индексы когда-либо были:
+        0, 1, 4, 7
+
+        после загрузки получаем:
+        0, 1, 2, 3
+    */
+
+    reindexEntries();
 }

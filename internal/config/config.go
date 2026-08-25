@@ -14,11 +14,11 @@ type Config struct {
 	Environment   string
 	ServerAddress string
 	SecureCookies bool
+	AdminPassword string
 }
 
 func Load() (Config, error) {
 	environment := os.Getenv("APP_ENV")
-
 	if environment == "" {
 		environment = EnvironmentDevelopment
 	}
@@ -34,14 +34,19 @@ func Load() (Config, error) {
 	}
 
 	serverAddress := os.Getenv("SERVER_ADDRESS")
-
 	if serverAddress == "" {
 		serverAddress = "127.0.0.1:8080"
+	}
+
+	adminPassword := os.Getenv("ADMIN_PASSWORD")
+	if adminPassword == "" {
+		return Config{}, fmt.Errorf("ADMIN_PASSWORD is required")
 	}
 
 	return Config{
 		Environment:   environment,
 		ServerAddress: serverAddress,
 		SecureCookies: environment == EnvironmentProduction,
+		AdminPassword: adminPassword,
 	}, nil
 }

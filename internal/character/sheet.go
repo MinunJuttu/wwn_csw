@@ -7,13 +7,16 @@ import (
 )
 
 const (
-	DefaultFociRows        = 8
+	DefaultFociRows = 1
+	MaxFociRows     = 10
+
 	DefaultWeaponRows      = 5
 	DefaultReadiedItemRows = 10
 	DefaultStowedItemRows  = 20
-	MaxSpellRows           = 50
-	MaxMagicArtRows        = 25
-	MaxMagicTraditionRows  = 50
+
+	MaxSpellRows          = 50
+	MaxMagicArtRows       = 25
+	MaxMagicTraditionRows = 5
 )
 
 // Sheet содержит все данные листа,
@@ -221,18 +224,14 @@ type MagicArt struct {
 // Позже JavaScript позволит добавлять и удалять строки
 // без фиксированного ограничения.
 func (s *Sheet) EnsureRows() {
-	for len(s.Foci) < DefaultFociRows {
-		s.Foci = append(
-			s.Foci,
-			Focus{},
-		)
+	s.Foci = compactFoci(s.Foci)
+
+	if len(s.Foci) == 0 {
+		s.Foci = append(s.Foci, Focus{})
 	}
 
 	for len(s.Weapons) < DefaultWeaponRows {
-		s.Weapons = append(
-			s.Weapons,
-			Weapon{},
-		)
+		s.Weapons = append(s.Weapons, Weapon{})
 	}
 
 	for len(s.ReadiedItems) < DefaultReadiedItemRows {
@@ -250,10 +249,7 @@ func (s *Sheet) EnsureRows() {
 	}
 
 	if len(s.Spells) == 0 {
-		s.Spells = append(
-			s.Spells,
-			Spell{},
-		)
+		s.Spells = append(s.Spells, Spell{})
 	}
 
 	if len(s.MagicTraditions) == 0 {
@@ -269,6 +265,22 @@ func (s *Sheet) EnsureRows() {
 			MagicArt{},
 		)
 	}
+}
+
+func compactFoci(foci []Focus) []Focus {
+	result := make([]Focus, 0, len(foci))
+
+	for _, focus := range foci {
+		if strings.TrimSpace(focus.Name) == "" &&
+			strings.TrimSpace(focus.Level) == "" &&
+			strings.TrimSpace(focus.Description) == "" {
+			continue
+		}
+
+		result = append(result, focus)
+	}
+
+	return result
 }
 
 // DecodeSheet превращает JSON из SQLite в Sheet.

@@ -247,3 +247,38 @@ func (s *Store) Update(
 
 	return nil
 }
+
+func (s *Store) Delete(
+	characterID int64,
+	userID int64,
+) error {
+	result, err := s.db.Exec(
+		`
+		DELETE FROM characters
+		WHERE id = ? AND user_id = ?
+		`,
+		characterID,
+		userID,
+	)
+
+	if err != nil {
+		return fmt.Errorf(
+			"delete character: %w",
+			err,
+		)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf(
+			"get deleted character count: %w",
+			err,
+		)
+	}
+
+	if rowsAffected == 0 {
+		return ErrNotFound
+	}
+
+	return nil
+}

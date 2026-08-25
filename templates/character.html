@@ -997,130 +997,109 @@
 
 <!-- =========================================
      ЧЕРТЫ
-     СВОРАЧИВАЕМЫЙ БЛОК
 ========================================== -->
-
 <details class="sheet-section collapsible">
-
     <summary>
         ЧЕРТЫ
     </summary>
-
     <div class="collapsible-content">
-
-        <div class="traits-list">
-
+        <div
+            id="foci-list"
+            class="traits-list"
+        >
             {{range $i, $focus := .Sheet.Foci}}
-
-                <div class="trait-card">
-
+                <div class="trait-card dynamic-entry">
                     <div class="trait-header">
-
                         <div class="field">
-
                             <label>
                                 Название черты
                             </label>
-
                             <input
                                 name="focus_name_{{$i}}"
                                 type="text"
                                 value="{{$focus.Name}}"
-                                placeholder="Название"
                             >
-
                         </div>
-
-
                         <div class="field trait-level">
-
                             <label>
                                 Уровень
                             </label>
-
                             <input
                                 name="focus_level_{{$i}}"
                                 type="text"
                                 value="{{$focus.Level}}"
-                                placeholder="Ур."
                             >
-
                         </div>
 
+                        <button
+                            class="remove-entry-button"
+                            type="button"
+                            title="Удалить черту"
+                            aria-label="Удалить черту"
+                        >
+                            ×
+                        </button>
                     </div>
 
-
                     <div class="field">
-
                         <label>
                             Описание
                         </label>
-
                         <textarea
                             name="focus_description_{{$i}}"
                             rows="4"
                             placeholder="Что делает эта черта?"
                         >{{$focus.Description}}</textarea>
-
                     </div>
-
                 </div>
-
             {{end}}
-
         </div>
 
+
+        <button
+            id="add-focus"
+            class="add-entry-button"
+            type="button"
+        >
+            + Добавить черту
+        </button>
     </div>
-
 </details>
-
-
 
         <!-- =========================================
              ПРЕДМЕТЫ ПОД РУКОЙ
              СВОРАЧИВАЕМЫЙ БЛОК
         ========================================== -->
-
 <details class="sheet-section collapsible inventory-section">
-
     <summary>
         Подготовленные предметы
     </summary>
 
     <div class="collapsible-content">
-
         <div class="inventory-toolbar">
-
             <span class="inventory-hint">
                 Нажми слева, чтобы затемнить недоступную ячейку
             </span>
-
             <label class="inventory-max">
-                <span>Макс. (СИЛА/2 с окр. в меньшую сторону)</span>
-
+                <span>Макс. (знач. СИЛА/2)</span>
                 <input
                     name="readied_max_load"
                     type="text"
                     value="{{.Sheet.ReadiedMaxLoad}}"
                 >
             </label>
-
         </div>
 
-
         <div class="inventory-table">
-
             <div class="inventory-table-header">
                 <span></span>
                 <span>Предмет</span>
                 <span>Вес</span>
             </div>
 
-
             {{range $i, $item := .Sheet.ReadiedItems}}
 
                 <div class="inventory-row">
-
                     <label
                         class="slot-toggle-label"
                         title="Доступность ячейки"
@@ -1132,10 +1111,8 @@
                             value="1"
                             {{if $item.Disabled}}checked{{end}}
                         >
-
                         <span class="slot-toggle-icon"></span>
                     </label>
-
 
                     <input
                         class="inventory-item-name"
@@ -1145,71 +1122,50 @@
                         placeholder="Предмет"
                     >
 
-
                     <input
                         class="inventory-item-weight"
                         name="item_encumbrance_{{$i}}"
                         type="text"
                         value="{{$item.Encumbrance}}"
                     >
-
                 </div>
-
             {{end}}
-
         </div>
-
     </div>
-
 </details>
-
-
 
         <!-- =========================================
              РЮКЗАК / STOWED ITEMS
              СВОРАЧИВАЕМЫЙ БЛОК
         ========================================== -->
-
 <details class="sheet-section collapsible inventory-section">
-
     <summary>
         Рюкзак
     </summary>
-
     <div class="collapsible-content">
-
         <div class="inventory-toolbar">
-
             <span class="inventory-hint">
                 Нажми слева, чтобы затемнить недоступную ячейку
             </span>
-
             <label class="inventory-max">
-                <span>Макс. (значение СИЛА)</span>
-
+                <span>Макс. (знач. СИЛА)</span>
                 <input
                     name="stowed_max_load"
                     type="text"
                     value="{{.Sheet.StowedMaxLoad}}"
                 >
             </label>
-
         </div>
 
-
         <div class="inventory-table">
-
             <div class="inventory-table-header">
                 <span></span>
                 <span>Предмет</span>
                 <span>Вес</span>
             </div>
 
-
             {{range $i, $item := .Sheet.StowedItems}}
-
                 <div class="inventory-row">
-
                     <label
                         class="slot-toggle-label"
                         title="Доступность ячейки"
@@ -1221,11 +1177,8 @@
                             value="1"
                             {{if $item.Disabled}}checked{{end}}
                         >
-
                         <span class="slot-toggle-icon"></span>
                     </label>
-
-
                     <input
                         class="inventory-item-name"
                         name="stowed_item_name_{{$i}}"
@@ -1233,234 +1186,168 @@
                         value="{{$item.Name}}"
                         placeholder="Предмет"
                     >
-
-
                     <input
                         class="inventory-item-weight"
                         name="stowed_item_encumbrance_{{$i}}"
                         type="text"
                         value="{{$item.Encumbrance}}"
                     >
-
                 </div>
-
             {{end}}
-
         </div>
-
     </div>
-
 </details>
-
-
 
 <!-- =========================================
      ИМУЩЕСТВО
      СВОРАЧИВАЕМЫЙ БЛОК
 ========================================== -->
-
 <details class="sheet-section collapsible">
-
     <summary>
         ИМУЩЕСТВО
     </summary>
 
-
     <div class="collapsible-content">
-
-
         <div class="money-grid">
-
-
             <div class="field">
-
                 <label>
                     Серебро
                 </label>
-
                 <input
                     name="property_silver"
                     type="text"
                     value="{{.Sheet.Property.Silver}}"
                 >
-
             </div>
 
-
             <div class="field">
-
                 <label>
                     Золото
                 </label>
-
                 <input
                     name="property_gold"
                     type="text"
                     value="{{.Sheet.Property.Gold}}"
                 >
-
             </div>
-
-
         </div>
 
-
         <div class="field">
-
             <label>
                 Вещи на хранении
             </label>
-
             <textarea
                 name="property_stored"
                 rows="6"
                 placeholder="Имущество, которое персонаж не носит с собой: вещи в лагере, банке, у NPC и т. п."
             >{{.Sheet.Property.StoredPossessions}}</textarea>
-
         </div>
-
-
     </div>
-
 </details>
 
         <!-- =========================================
              ПРЕДЫСТОРИЯ И СПОСОБНОСТИ
              СВОРАЧИВАЕМЫЙ БЛОК
         ========================================== -->
-
         <details class="sheet-section collapsible">
-
             <summary>
                 ПРЕДИСТОРИЯ И СПОСОБНОСТИ
             </summary>
 
-
             <div class="collapsible-content">
-
-
                 <div class="field">
-
                     <label>
                         Подробности предыстории
                     </label>
-
                     <textarea
                         name="background_details"
                         rows="6"
                     >{{.Sheet.BackgroundDetails}}</textarea>
-
                 </div>
 
-
                 <div class="field">
-
                     <label>
                         Способности класса
                     </label>
-
                     <textarea
                         name="benefits"
                         rows="6"
                     >{{.Sheet.Benefits}}</textarea>
-
                 </div>
-
-
             </div>
-
         </details>
 
 <!-- =========================================
      ЗАКЛИНАНИЯ
 ========================================== -->
-
 <details class="sheet-section collapsible">
-
     <summary>
         ЗАКЛИНАНИЯ
     </summary>
 
     <div class="collapsible-content">
-
         <div
             id="spells-list"
             class="magic-entry-list"
-            data-next-index="{{len .Sheet.Spells}}"
         >
-
             {{range $i, $spell := .Sheet.Spells}}
-
-                <div class="magic-entry-card">
-
-                    <div class="magic-entry-header">
-
+                <div class="magic-entry-card dynamic-entry">
+                    <div class="magic-entry-header spell-entry-header">
                         <div class="field">
-
                             <label>
                                 Название
                             </label>
-
                             <input
                                 name="spell_name_{{$i}}"
                                 type="text"
                                 value="{{$spell.Name}}"
                             >
-
                         </div>
 
-
                         <div class="field magic-level-field">
-
                             <label>
                                 Уровень
                             </label>
-
                             <input
                                 name="spell_level_{{$i}}"
                                 type="text"
                                 value="{{$spell.Level}}"
                             >
-
                         </div>
 
+                        <button
+                            class="remove-entry-button"
+                            type="button"
+                            title="Удалить заклинание"
+                            aria-label="Удалить заклинание"
+                        >
+                            ×
+                        </button>
                     </div>
 
-
                     <div class="field">
-
                         <label>
                             Традиция
                         </label>
-
                         <input
                             name="spell_tradition_{{$i}}"
                             type="text"
                             value="{{$spell.Tradition}}"
                         >
-
                     </div>
 
-
                     <div class="field">
-
                         <label>
                             Описание
                         </label>
-
                         <textarea
                             name="spell_description_{{$i}}"
                             rows="5"
                         >{{$spell.Description}}</textarea>
-
                     </div>
-
                 </div>
-
             {{end}}
-
         </div>
-
 
         <button
             id="add-spell"
@@ -1469,93 +1356,75 @@
         >
             + Добавить заклинание
         </button>
-
     </div>
-
 </details>
 
 <!-- =========================================
      МАГИЧЕСКИЕ ИСКУССТВА
 ========================================== -->
-
 <details class="sheet-section collapsible">
-
     <summary>
         МАГИЧЕСКИЕ ИСКУССТВА
     </summary>
 
     <div class="collapsible-content">
 
-
         <!-- ТРАДИЦИИ -->
-
         <div class="magic-subsection">
-
             <h3>
                 Традиции
             </h3>
 
-
             <div
                 id="magic-traditions-list"
                 class="traditions-list"
-                data-next-index="{{len .Sheet.MagicTraditions}}"
             >
-
                 {{range $i, $tradition := .Sheet.MagicTraditions}}
-
-                    <div class="tradition-row">
-
+                    <div class="tradition-row dynamic-entry">
                         <div class="field">
-
                             <label>
                                 Традиция
                             </label>
-
                             <input
                                 name="magic_tradition_name_{{$i}}"
                                 type="text"
                                 value="{{$tradition.Name}}"
                             >
-
                         </div>
 
-
                         <div class="field tradition-effort">
-
                             <label>
                                 Усилия макс.
                             </label>
-
                             <input
                                 name="magic_tradition_max_{{$i}}"
                                 type="text"
                                 value="{{$tradition.EffortMax}}"
                             >
-
                         </div>
 
-
                         <div class="field tradition-effort">
-
                             <label>
                                 Текущие
                             </label>
-
                             <input
                                 name="magic_tradition_current_{{$i}}"
                                 type="text"
                                 value="{{$tradition.EffortCurrent}}"
                             >
-
                         </div>
 
+                        <button
+                            class="remove-entry-button"
+                            type="button"
+                            title="Удалить традицию"
+                            aria-label="Удалить традицию"
+                        >
+                            ×
+                        </button>
                     </div>
-
                 {{end}}
-
             </div>
-
 
             <button
                 id="add-magic-tradition"
@@ -1564,69 +1433,57 @@
             >
                 + Добавить традицию
             </button>
-
         </div>
 
-
         <!-- ИСКУССТВА -->
-
         <div class="magic-subsection">
-
             <h3>
                 Искусства
             </h3>
 
-
             <div
                 id="magic-arts-list"
                 class="magic-entry-list"
-                data-next-index="{{len .Sheet.MagicArts}}"
             >
-
                 {{range $i, $art := .Sheet.MagicArts}}
-
-                    <div class="magic-entry-card">
-
-                        <div class="magic-entry-header">
-
+                    <div class="magic-entry-card dynamic-entry">
+                        <div class="magic-entry-header art-entry-header">
                             <div class="field">
-
                                 <label>
                                     Название
                                 </label>
-
                                 <input
                                     name="magic_art_name_{{$i}}"
                                     type="text"
                                     value="{{$art.Name}}"
                                 >
-
                             </div>
 
-
                             <div class="field">
-
                                 <label>
                                     Традиция
                                 </label>
-
                                 <input
                                     name="magic_art_tradition_{{$i}}"
                                     type="text"
                                     value="{{$art.Tradition}}"
                                 >
-
                             </div>
 
+                            <button
+                                class="remove-entry-button"
+                                type="button"
+                                title="Удалить искусство"
+                                aria-label="Удалить искусство"
+                            >
+                                ×
+                            </button>
                         </div>
 
-
                         <div class="field">
-
                             <label>
                                 Усилие тратится на
                             </label>
-
                             <input
                                 name="magic_art_effort_{{$i}}"
                                 type="text"
@@ -1634,29 +1491,20 @@
                                 value="{{$art.EffortSpentOn}}"
                                 placeholder="На сцену / На день / Постоянно"
                             >
-
                         </div>
 
-
                         <div class="field">
-
                             <label>
                                 Описание искусства
                             </label>
-
                             <textarea
                                 name="magic_art_description_{{$i}}"
                                 rows="5"
                             >{{$art.Description}}</textarea>
-
                         </div>
-
                     </div>
-
                 {{end}}
-
             </div>
-
 
             <button
                 id="add-magic-art"
@@ -1665,37 +1513,27 @@
             >
                 + Добавить искусство
             </button>
-
         </div>
-
     </div>
-
 </details>
 
         <!-- =========================================
              О ПЕРСОНАЖЕ
              СВОРАЧИВАЕМЫЙ БЛОК
         ========================================== -->
-
         <details class="sheet-section collapsible">
-
             <summary>
                 О персонаже
             </summary>
 
-
             <div class="collapsible-content">
-
-
                 <div class="sheet-grid">
 
 
                     <div class="field">
-
                         <label>
                             Родина
                         </label>
-
                         <input
                             name="homeland"
                             type="text"
@@ -1704,95 +1542,67 @@
 
                     </div>
 
-
                     <div class="field">
 
                         <label>
                             Род занятий
                         </label>
-
                         <input
                             name="occupation"
                             type="text"
                             value="{{.Sheet.Occupation}}"
                         >
-
                     </div>
-
 
                     <div class="field field-wide">
 
                         <label>
                             Раса / Вид
                         </label>
-
                         <input
                             name="race_species"
                             type="text"
                             value="{{.Sheet.RaceSpecies}}"
                         >
-
                     </div>
 
-
                     <div class="field field-wide">
-
                         <label>
                             Цель
                         </label>
-
                         <input
                             name="goal"
                             type="text"
                             value="{{.Sheet.Goal}}"
                         >
-
                     </div>
-
-
                 </div>
 
-
-
                 <div class="field">
-
                     <label>
                         Описание
                     </label>
-
                     <textarea
                         name="description"
                         rows="7"
                     >{{.Sheet.Description}}</textarea>
-
                 </div>
 
-
-
                 <div class="field">
-
                     <label>
                         Заметки
                     </label>
-
                     <textarea
                         name="sketch_or_sigil"
-                        rows="6"
+                        rows="10"
                     >{{.Sheet.SketchOrSigil}}</textarea>
-
                 </div>
-
-
             </div>
-
         </details>
-
-
 
         <!-- =========================================
              СОХРАНЕНИЕ
         ========================================== -->
-
         <button
             class="save-character-button"
             type="submit"
@@ -1800,77 +1610,80 @@
             Сохранить персонажа
         </button>
 
+        <div class="character-danger-zone">
 
+    <button
+        class="delete-character-button"
+        type="submit"
+        name="action"
+        value="delete"
+        onclick="return confirm('Удалить этого персонажа? Это действие нельзя отменить.')"
+    >
+        Удалить персонажа
+    </button>
+
+</div>
     </form>
-
 </main>
 
+<!-- =========================================
+     ШАБЛОН НОВОГО ЗАКЛИНАНИЯ
+========================================== -->
 <template id="spell-template">
-
-    <div class="magic-entry-card">
-
-        <div class="magic-entry-header">
-
+    <div class="magic-entry-card dynamic-entry">
+        <div class="magic-entry-header spell-entry-header">
             <div class="field">
-
                 <label>
                     Название
                 </label>
-
                 <input
                     name="spell_name___INDEX__"
                     type="text"
                 >
-
             </div>
 
-
             <div class="field magic-level-field">
-
                 <label>
                     Уровень
                 </label>
-
                 <input
                     name="spell_level___INDEX__"
                     type="text"
                 >
-
             </div>
 
+            <button
+                class="remove-entry-button"
+                type="button"
+                title="Удалить заклинание"
+                aria-label="Удалить заклинание"
+            >
+                ×
+            </button>
         </div>
 
-
         <div class="field">
-
             <label>
                 Традиция
             </label>
-
             <input
                 name="spell_tradition___INDEX__"
                 type="text"
             >
-
         </div>
 
-
         <div class="field">
-
             <label>
                 Описание
             </label>
-
             <textarea
                 name="spell_description___INDEX__"
                 rows="5"
             ></textarea>
-
         </div>
-
     </div>
-
 </template>
+
 
 <datalist id="effort-spend-options">
     <option value="На сцену">
@@ -1878,122 +1691,162 @@
     <option value="Постоянно">
 </datalist>
 
+
+<!-- =========================================
+     ШАБЛОН НОВОЙ ТРАДИЦИИ
+========================================== -->
 <template id="magic-tradition-template">
-
-    <div class="tradition-row">
-
+    <div class="tradition-row dynamic-entry">
         <div class="field">
-
             <label>
                 Традиция
             </label>
-
             <input
                 name="magic_tradition_name___INDEX__"
                 type="text"
             >
-
         </div>
 
-
         <div class="field tradition-effort">
-
             <label>
                 Усилия макс.
             </label>
-
             <input
                 name="magic_tradition_max___INDEX__"
                 type="text"
             >
-
         </div>
 
-
         <div class="field tradition-effort">
-
             <label>
                 Текущие
             </label>
-
             <input
                 name="magic_tradition_current___INDEX__"
                 type="text"
             >
-
         </div>
 
+        <button
+            class="remove-entry-button"
+            type="button"
+            title="Удалить традицию"
+            aria-label="Удалить традицию"
+        >
+            ×
+        </button>
     </div>
-
 </template>
 
+
+<!-- =========================================
+     ШАБЛОН НОВОГО ИСКУССТВА
+========================================== -->
 <template id="magic-art-template">
-
-    <div class="magic-entry-card">
-
-        <div class="magic-entry-header">
-
+    <div class="magic-entry-card dynamic-entry">
+        <div class="magic-entry-header art-entry-header">
             <div class="field">
-
                 <label>
                     Название
                 </label>
-
                 <input
                     name="magic_art_name___INDEX__"
                     type="text"
                 >
-
             </div>
 
-
             <div class="field">
-
                 <label>
                     Традиция
                 </label>
-
                 <input
                     name="magic_art_tradition___INDEX__"
                     type="text"
                 >
-
             </div>
 
+            <button
+                class="remove-entry-button"
+                type="button"
+                title="Удалить искусство"
+                aria-label="Удалить искусство"
+            >
+                ×
+            </button>
         </div>
 
-
         <div class="field">
-
             <label>
                 Усилие тратится на
             </label>
-
             <input
                 name="magic_art_effort___INDEX__"
                 type="text"
                 list="effort-spend-options"
                 placeholder="На сцену / На день / Постоянно"
             >
-
         </div>
 
-
         <div class="field">
-
             <label>
                 Описание искусства
             </label>
-
             <textarea
                 name="magic_art_description___INDEX__"
                 rows="5"
             ></textarea>
+        </div>
+    </div>
+</template>
 
+
+<!-- =========================================
+     ШАБЛОН НОВОЙ ЧЕРТЫ
+========================================== -->
+<template id="focus-template">
+    <div class="trait-card dynamic-entry">
+        <div class="trait-header">
+            <div class="field">
+                <label>
+                    Название черты
+                </label>
+                <input
+                    name="focus_name___INDEX__"
+                    type="text"
+                >
+            </div>
+
+            <div class="field trait-level">
+                <label>
+                    Уровень
+                </label>
+                <input
+                    name="focus_level___INDEX__"
+                    type="text"
+                >
+            </div>
+
+            <button
+                class="remove-entry-button"
+                type="button"
+                title="Удалить черту"
+                aria-label="Удалить черту"
+            >
+                ×
+            </button>
         </div>
 
+        <div class="field">
+            <label>
+                Описание
+            </label>
+            <textarea
+                name="focus_description___INDEX__"
+                rows="4"
+                placeholder="Что делает эта черта?"
+            ></textarea>
+        </div>
     </div>
-
 </template>
 
 </body>

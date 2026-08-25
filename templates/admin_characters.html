@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Персонажи — Админка WWN</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <header class="admin-topbar">
+            <div>
+                <a class="admin-back-link" href="/admin">← Админка</a>
+                <h1>Персонажи</h1>
+            </div>
+            <a class="admin-ghost-button" href="/admin/table">Мастерский стол</a>
+        </header>
+
+        {{if .Characters}}
+            <div class="admin-character-list">
+                {{range .Characters}}
+                    <article class="admin-character-row">
+                        <a class="admin-character-row-main" href="/admin/characters/{{.ID}}">
+                            <div>
+                                <strong>{{.Name}}</strong>
+                                <span>Игрок: {{.OwnerUsername}}</span>
+                            </div>
+                            <div class="admin-character-meta">
+                                <span>Уровень {{.Level}}</span>
+                                {{if .Class}}<span>{{.Class}}</span>{{end}}
+                            </div>
+                        </a>
+
+                        <form
+                            method="post"
+                            action="/admin/characters/{{.ID}}/delete"
+                            onsubmit="return confirm('Удалить персонажа «{{.Name}}» игрока {{.OwnerUsername}}? Это действие нельзя отменить.')"
+                        >
+                            <button class="admin-delete-button" type="submit">Удалить</button>
+                        </form>
+                    </article>
+                {{end}}
+            </div>
+        {{else}}
+            <div class="admin-empty-state">Персонажей пока нет.</div>
+        {{end}}
+    </main>
+</body>
+</html>

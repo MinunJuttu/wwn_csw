@@ -1158,3 +1158,152 @@ input[type="text"] {
         font-size: 11px;
     }
 }
+
+/* =========================
+   УДАЛЕНИЕ ДИНАМИЧЕСКИХ ПОЛЕЙ
+========================= */
+
+.remove-entry-button {
+    align-self: end;
+
+    width: 34px;
+    height: 38px;
+
+    padding: 0;
+
+    font-size: 23px;
+    line-height: 1;
+
+    color: #777;
+    background: transparent;
+
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.remove-entry-button:hover {
+    color: #a00;
+    border-color: #c88;
+    background: #fff3f3;
+}
+
+.remove-entry-button:disabled {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+/* Черта */
+
+.trait-header {
+    grid-template-columns:
+        minmax(0, 1fr)
+        80px
+        34px;
+}
+
+
+/* Заклинание */
+
+.spell-entry-header {
+    grid-template-columns:
+        minmax(0, 1fr)
+        90px
+        34px;
+}
+
+
+/* Искусство */
+
+.art-entry-header {
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(120px, 0.7fr)
+        34px;
+}
+
+
+/* Традиция */
+
+.tradition-row {
+    grid-template-columns:
+        minmax(0, 1fr)
+        95px
+        95px
+        34px;
+}
+
+
+@media (max-width: 480px) {
+
+    .trait-header {
+        grid-template-columns:
+            minmax(0, 1fr)
+            68px
+            32px;
+    }
+
+    .spell-entry-header {
+        grid-template-columns:
+            minmax(0, 1fr)
+            68px
+            32px;
+    }
+
+    .art-entry-header {
+        grid-template-columns:
+            minmax(0, 1fr)
+            95px
+            32px;
+    }
+
+    .tradition-row {
+        grid-template-columns:
+            minmax(0, 1fr)
+            62px
+            62px
+            30px;
+    }
+
+    .remove-entry-button {
+        width: 30px;
+        height: 36px;
+    }
+}
+
+.character-danger-zone {
+    margin-top: 32px;
+    padding-top: 20px;
+
+    border-top: 1px solid #ddd;
+}
+
+.delete-character-button {
+    width: 100%;
+
+    padding: 11px 14px;
+
+    font: inherit;
+    font-weight: 600;
+
+    color: #9b2222;
+    background: transparent;
+
+    border: 1px solid #d7a0a0;
+    border-radius: 9px;
+
+    cursor: pointer;
+}
+
+.delete-character-button:hover {
+    color: white;
+    background: #a52a2a;
+    border-color: #a52a2a;
+}

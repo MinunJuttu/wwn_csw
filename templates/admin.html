@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Админка — WWN</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin-page">
+    <main class="admin-shell">
+        <header class="admin-topbar">
+            <div>
+                <div class="admin-eyebrow">WWN CSW</div>
+                <h1>Админка</h1>
+            </div>
+            <form method="post" action="/admin/logout">
+                <button class="admin-ghost-button" type="submit">Выйти</button>
+            </form>
+        </header>
+
+        <section class="admin-home-grid">
+            <a class="admin-home-card" href="/admin/characters">
+                <strong>Просмотр персонажей</strong>
+                <span>Все персонажи игроков, просмотр листов и удаление.</span>
+            </a>
+
+            <a class="admin-home-card" href="/admin/table">
+                <strong>Мастерский стол</strong>
+                <span>Закрепить до пяти персонажей и смотреть их параллельно.</span>
+            </a>
+        </section>
+    </main>
+</body>
+</html>

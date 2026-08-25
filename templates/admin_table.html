@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Мастерский стол — WWN</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <script src="/static/js/admin.js" defer></script>
+</head>
+<body class="admin-table-page">
+    <div class="admin-table-mobile-blocked">
+        <h1>Мастерский стол</h1>
+        <p>Эта вкладка рассчитана только на компьютер с широким экраном.</p>
+        <a class="admin-primary-button" href="/admin">Вернуться в админку</a>
+    </div>
+
+    <main class="admin-table-desktop">
+        <header class="admin-table-topbar">
+            <div>
+                <a class="admin-back-link" href="/admin">← Админка</a>
+                <h1>Мастерский стол</h1>
+            </div>
+            <a class="admin-ghost-button" href="/admin/characters">Список персонажей</a>
+        </header>
+
+        <section class="gm-desk" id="gm-desk">
+            <div class="gm-slot" data-slot="0">
+                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
+                <div class="gm-slot-filled" hidden>
+                    <header class="gm-slot-header">
+                        <div class="gm-slot-title"></div>
+                        <button class="gm-slot-remove" type="button">Убрать</button>
+                    </header>
+                    <iframe class="gm-slot-frame" title="Персонаж 1"></iframe>
+                </div>
+            </div>
+
+            <div class="gm-slot" data-slot="1">
+                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
+                <div class="gm-slot-filled" hidden>
+                    <header class="gm-slot-header">
+                        <div class="gm-slot-title"></div>
+                        <button class="gm-slot-remove" type="button">Убрать</button>
+                    </header>
+                    <iframe class="gm-slot-frame" title="Персонаж 2"></iframe>
+                </div>
+            </div>
+
+            <div class="gm-slot" data-slot="2">
+                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
+                <div class="gm-slot-filled" hidden>
+                    <header class="gm-slot-header">
+                        <div class="gm-slot-title"></div>
+                        <button class="gm-slot-remove" type="button">Убрать</button>
+                    </header>
+                    <iframe class="gm-slot-frame" title="Персонаж 3"></iframe>
+                </div>
+            </div>
+
+            <div class="gm-slot" data-slot="3">
+                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
+                <div class="gm-slot-filled" hidden>
+                    <header class="gm-slot-header">
+                        <div class="gm-slot-title"></div>
+                        <button class="gm-slot-remove" type="button">Убрать</button>
+                    </header>
+                    <iframe class="gm-slot-frame" title="Персонаж 4"></iframe>
+                </div>
+            </div>
+
+            <div class="gm-slot" data-slot="4">
+                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
+                <div class="gm-slot-filled" hidden>
+                    <header class="gm-slot-header">
+                        <div class="gm-slot-title"></div>
+                        <button class="gm-slot-remove" type="button">Убрать</button>
+                    </header>
+                    <iframe class="gm-slot-frame" title="Персонаж 5"></iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="character-picker" class="character-picker">
+        <div class="character-picker-head">
+            <div>
+                <div class="admin-eyebrow">Мастерский стол</div>
+                <h2>Выберите персонажа</h2>
+            </div>
+            <button id="close-character-picker" class="admin-ghost-button" type="button">Закрыть</button>
+        </div>
+
+        <div class="character-picker-search">
+            <input id="character-picker-filter" type="search" placeholder="Поиск по имени персонажа или игрока">
+        </div>
+
+        <div class="character-picker-list" id="character-picker-list">
+            {{range .Characters}}
+                <button
+                    class="character-picker-item"
+                    type="button"
+                    data-character-id="{{.ID}}"
+                    data-character-name="{{.Name}}"
+                    data-character-owner="{{.OwnerUsername}}"
+                    data-character-level="{{.Level}}"
+                >
+                    <strong>{{.Name}}</strong>
+                    <span>{{.OwnerUsername}} · уровень {{.Level}}</span>
+                </button>
+            {{end}}
+        </div>
+    </dialog>
+</body>
+</html>
