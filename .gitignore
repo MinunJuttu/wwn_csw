@@ -55,3 +55,6 @@ go.work.sum
 
 # Logs
 *.log
+
+/wwn-server
+/wwn-server.new
