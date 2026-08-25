@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>{{.Character.Name}} — WWN Character Sheet</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container character-sheet">
+
+        <a
+            class="back-link"
+            href="/characters"
+        >
+            ← Персонажи
+        </a>
+
+
+        {{if .Saved}}
+
+            <div class="message success">
+                Персонаж сохранён.
+            </div>
+
+        {{end}}
+
+
+        {{if .Error}}
+
+            <div class="message error">
+                {{.Error}}
+            </div>
+
+        {{end}}
+
+
+        <form
+            method="post"
+            action="/characters/{{.Character.ID}}"
+        >
+
+            <section class="sheet-section">
+
+                <h1>Персонаж</h1>
+
+                <div class="sheet-grid">
+
+                    <div class="field field-wide">
+
+                        <label for="name">
+                            Имя
+                        </label>
+
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            value="{{.Character.Name}}"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="level">
+                            Уровень
+                        </label>
+
+                        <input
+                            id="level"
+                            name="level"
+                            type="number"
+                            value="{{.Character.Level}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="class">
+                            Класс
+                        </label>
+
+                        <input
+                            id="class"
+                            name="class"
+                            type="text"
+                            value="{{.Character.Class}}"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="sheet-section">
+
+                <h2>Характеристики</h2>
+
+                <div class="attributes-grid">
+
+                    <div class="attribute">
+
+                        <label for="strength">
+                            STR
+                        </label>
+
+                        <input
+                            id="strength"
+                            name="strength"
+                            type="number"
+                            value="{{.Sheet.Attributes.Strength}}"
+                        >
+
+                    </div>
+
+
+                    <div class="attribute">
+
+                        <label for="dexterity">
+                            DEX
+                        </label>
+
+                        <input
+                            id="dexterity"
+                            name="dexterity"
+                            type="number"
+                            value="{{.Sheet.Attributes.Dexterity}}"
+                        >
+
+                    </div>
+
+
+                    <div class="attribute">
+
+                        <label for="constitution">
+                            CON
+                        </label>
+
+                        <input
+                            id="constitution"
+                            name="constitution"
+                            type="number"
+                            value="{{.Sheet.Attributes.Constitution}}"
+                        >
+
+                    </div>
+
+
+                    <div class="attribute">
+
+                        <label for="intelligence">
+                            INT
+                        </label>
+
+                        <input
+                            id="intelligence"
+                            name="intelligence"
+                            type="number"
+                            value="{{.Sheet.Attributes.Intelligence}}"
+                        >
+
+                    </div>
+
+
+                    <div class="attribute">
+
+                        <label for="wisdom">
+                            WIS
+                        </label>
+
+                        <input
+                            id="wisdom"
+                            name="wisdom"
+                            type="number"
+                            value="{{.Sheet.Attributes.Wisdom}}"
+                        >
+
+                    </div>
+
+
+                    <div class="attribute">
+
+                        <label for="charisma">
+                            CHA
+                        </label>
+
+                        <input
+                            id="charisma"
+                            name="charisma"
+                            type="number"
+                            value="{{.Sheet.Attributes.Charisma}}"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="sheet-section">
+
+                <h2>HP</h2>
+
+                <div class="hp-row">
+
+                    <div class="field">
+
+                        <label for="hp_current">
+                            Текущие
+                        </label>
+
+                        <input
+                            id="hp_current"
+                            name="hp_current"
+                            type="number"
+                            value="{{.Sheet.HP.Current}}"
+                        >
+
+                    </div>
+
+
+                    <div class="hp-separator">
+                        /
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="hp_max">
+                            Максимум
+                        </label>
+
+                        <input
+                            id="hp_max"
+                            name="hp_max"
+                            type="number"
+                            value="{{.Sheet.HP.Max}}"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <button
+                class="save-character-button"
+                type="submit"
+            >
+                Сохранить
+            </button>
+
+        </form>
+
+    </main>
+
+</body>
+</html>

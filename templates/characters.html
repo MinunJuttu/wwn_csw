@@ -57,7 +57,10 @@
 
                 {{range .Characters}}
 
-                    <div class="card character-card">
+                    <a 
+                        class="card character-card"
+                        href="/characters/{{.ID}}"
+                    >
 
                         <h2>
                             {{.Name}}
@@ -65,9 +68,12 @@
 
                         <p>
                             Уровень {{.Level}}
+                            {{if .Class}}
+                                · {{.Class}}
+                            {{end}}
                         </p>
 
-                    </div>
+                    </a>
 
                 {{end}}
 

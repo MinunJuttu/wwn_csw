@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"html/template"
 	"log"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/MinunJuttu/wwn_csw/internal/auth"
@@ -47,6 +49,13 @@ type charactersPageData struct {
 type newCharacterPageData struct {
 	Name  string
 	Error string
+}
+
+type characterPageData struct {
+	Character character.Character
+	Sheet     character.Sheet
+	Error     string
+	Saved     bool
 }
 
 var usernamePattern = regexp.MustCompile(
@@ -118,6 +127,13 @@ func main() {
 		"/characters/new",
 		app.requireAuth(
 			app.newCharacterHandler,
+		),
+	)
+
+	mux.HandleFunc(
+		"/characters/",
+		app.requireAuth(
+			app.characterHandler,
 		),
 	)
 
@@ -683,6 +699,359 @@ func (app *application) newCharacterPost(
 		w,
 		r,
 		"/characters",
+		http.StatusSeeOther,
+	)
+}
+
+func (app *application) characterHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	characterID, err := characterIDFromPath(r)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch r.Method {
+
+	case http.MethodGet:
+		app.characterGet(
+			w,
+			r,
+			characterID,
+		)
+
+	case http.MethodPost:
+		app.characterPost(
+			w,
+			r,
+			characterID,
+		)
+
+	default:
+		w.Header().Set(
+			"Allow",
+			"GET, POST",
+		)
+
+		http.Error(
+			w,
+			"Method Not Allowed",
+			http.StatusMethodNotAllowed,
+		)
+	}
+}
+
+func characterIDFromPath(
+	r *http.Request,
+) (int64, error) {
+	idString := strings.TrimPrefix(
+		r.URL.Path,
+		"/characters/",
+	)
+
+	if idString == "" ||
+		strings.Contains(idString, "/") {
+		return 0, errors.New(
+			"invalid character id",
+		)
+	}
+
+	id, err := strconv.ParseInt(
+		idString,
+		10,
+		64,
+	)
+
+	if err != nil || id < 1 {
+		return 0, errors.New(
+			"invalid character id",
+		)
+	}
+
+	return id, nil
+}
+
+func (app *application) characterGet(
+	w http.ResponseWriter,
+	r *http.Request,
+	characterID int64,
+) {
+	u, ok := currentUser(r)
+
+	if !ok {
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	c, err := app.characters.GetByIDForUser(
+		characterID,
+		u.ID,
+	)
+
+	if errors.Is(
+		err,
+		character.ErrNotFound,
+	) {
+		http.NotFound(w, r)
+		return
+	}
+
+	if err != nil {
+		log.Printf(
+			"get character error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	var sheet character.Sheet
+
+	if c.Data != "" && c.Data != "{}" {
+		err := json.Unmarshal(
+			[]byte(c.Data),
+			&sheet,
+		)
+
+		if err != nil {
+			log.Printf(
+				"decode character data error: %v",
+				err,
+			)
+
+			http.Error(
+				w,
+				"Internal Server Error",
+				http.StatusInternalServerError,
+			)
+
+			return
+		}
+	}
+
+	data := characterPageData{
+		Character: c,
+		Sheet:     sheet,
+		Saved: r.URL.Query().
+			Get("saved") == "1",
+	}
+
+	renderTemplate(
+		w,
+		"templates/character.html",
+		data,
+	)
+}
+
+func (app *application) characterPost(
+	w http.ResponseWriter,
+	r *http.Request,
+	characterID int64,
+) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(
+			w,
+			"Bad Request",
+			http.StatusBadRequest,
+		)
+
+		return
+	}
+
+	u, ok := currentUser(r)
+
+	if !ok {
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	// Сначала убеждаемся, что персонаж
+	// действительно принадлежит пользователю.
+	c, err := app.characters.GetByIDForUser(
+		characterID,
+		u.ID,
+	)
+
+	if errors.Is(
+		err,
+		character.ErrNotFound,
+	) {
+		http.NotFound(w, r)
+		return
+	}
+
+	if err != nil {
+		log.Printf(
+			"get character error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	name := strings.TrimSpace(
+		r.PostForm.Get("name"),
+	)
+
+	class := strings.TrimSpace(
+		r.PostForm.Get("class"),
+	)
+
+	levelString := strings.TrimSpace(
+		r.PostForm.Get("level"),
+	)
+
+	if name == "" {
+		data := characterPageData{
+			Character: c,
+			Error:     "Укажи имя персонажа.",
+		}
+
+		renderTemplate(
+			w,
+			"templates/character.html",
+			data,
+		)
+
+		return
+	}
+
+	level, err := strconv.Atoi(
+		levelString,
+	)
+
+	if err != nil {
+		data := characterPageData{
+			Character: c,
+			Error:     "Уровень должен быть числом.",
+		}
+
+		renderTemplate(
+			w,
+			"templates/character.html",
+			data,
+		)
+
+		return
+	}
+
+	sheet := character.Sheet{
+		Attributes: character.Attributes{
+			Strength: strings.TrimSpace(
+				r.PostForm.Get("strength"),
+			),
+			Dexterity: strings.TrimSpace(
+				r.PostForm.Get("dexterity"),
+			),
+			Constitution: strings.TrimSpace(
+				r.PostForm.Get("constitution"),
+			),
+			Intelligence: strings.TrimSpace(
+				r.PostForm.Get("intelligence"),
+			),
+			Wisdom: strings.TrimSpace(
+				r.PostForm.Get("wisdom"),
+			),
+			Charisma: strings.TrimSpace(
+				r.PostForm.Get("charisma"),
+			),
+		},
+
+		HP: character.HitPoints{
+			Current: strings.TrimSpace(
+				r.PostForm.Get("hp_current"),
+			),
+			Max: strings.TrimSpace(
+				r.PostForm.Get("hp_max"),
+			),
+		},
+	}
+
+	jsonData, err := json.Marshal(
+		sheet,
+	)
+
+	if err != nil {
+		log.Printf(
+			"encode character data error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	err = app.characters.Update(
+		characterID,
+		u.ID,
+		name,
+		level,
+		class,
+		string(jsonData),
+	)
+
+	if errors.Is(
+		err,
+		character.ErrNotFound,
+	) {
+		http.NotFound(w, r)
+		return
+	}
+
+	if err != nil {
+		log.Printf(
+			"update character error: %v",
+			err,
+		)
+
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
+
+		return
+	}
+
+	http.Redirect(
+		w,
+		r,
+		"/characters/"+
+			strconv.FormatInt(
+				characterID,
+				10,
+			)+
+			"?saved=1",
 		http.StatusSeeOther,
 	)
 }

@@ -2,8 +2,11 @@ package character
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
+
+var ErrNotFound = errors.New("character not found")
 
 type Character struct {
 	ID           int64
@@ -137,4 +140,110 @@ func (s *Store) ListByUserID(
 	}
 
 	return characters, nil
+}
+
+// GetByIDForUser возвращает персонажа,
+// только если он принадлежит указанному пользователю.
+func (s *Store) GetByIDForUser(
+	characterID int64,
+	userID int64,
+) (Character, error) {
+	var c Character
+
+	err := s.db.QueryRow(
+		`
+		SELECT
+			id,
+			user_id,
+			name,
+			level,
+			class,
+			sheet_version,
+			data,
+			created_at,
+			updated_at
+		FROM characters
+		WHERE id = ?
+		  AND user_id = ?
+		`,
+		characterID,
+		userID,
+	).Scan(
+		&c.ID,
+		&c.UserID,
+		&c.Name,
+		&c.Level,
+		&c.Class,
+		&c.SheetVersion,
+		&c.Data,
+		&c.CreatedAt,
+		&c.UpdatedAt,
+	)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return Character{}, ErrNotFound
+	}
+
+	if err != nil {
+		return Character{}, fmt.Errorf(
+			"get character: %w",
+			err,
+		)
+	}
+
+	return c, nil
+}
+
+// Update сохраняет основные поля персонажа и JSON-лист.
+//
+// characterID и userID используются вместе,
+// чтобы нельзя было изменить чужого персонажа.
+func (s *Store) Update(
+	characterID int64,
+	userID int64,
+	name string,
+	level int,
+	class string,
+	data string,
+) error {
+	result, err := s.db.Exec(
+		`
+		UPDATE characters
+		SET
+			name = ?,
+			level = ?,
+			class = ?,
+			data = ?,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE id = ?
+		  AND user_id = ?
+		`,
+		name,
+		level,
+		class,
+		data,
+		characterID,
+		userID,
+	)
+
+	if err != nil {
+		return fmt.Errorf(
+			"update character: %w",
+			err,
+		)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf(
+			"get affected rows: %w",
+			err,
+		)
+	}
+
+	if rowsAffected == 0 {
+		return ErrNotFound
+	}
+
+	return nil
 }

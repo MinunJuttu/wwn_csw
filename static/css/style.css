@@ -209,3 +209,120 @@ button:hover,
 
     color: #666;
 }
+
+.character-card {
+    display: block;
+
+    color: inherit;
+    text-decoration: none;
+}
+
+.character-card:hover {
+    border-color: #999;
+}
+
+.character-sheet {
+    padding-bottom: 100px;
+}
+
+.sheet-section {
+    margin-bottom: 16px;
+    padding: 16px;
+
+    background: white;
+
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+.sheet-section h1,
+.sheet-section h2 {
+    margin-top: 0;
+}
+
+.sheet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.field-wide {
+    grid-column: 1 / -1;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #555;
+}
+
+.field input {
+    width: 100%;
+    padding: 10px;
+
+    font: inherit;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.attribute {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.attribute label {
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.attribute input {
+    width: 100%;
+    padding: 12px 4px;
+
+    font: inherit;
+    font-size: 20px;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.hp-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: end;
+}
+
+.hp-separator {
+    padding-bottom: 10px;
+
+    font-size: 24px;
+    color: #777;
+}
+
+.save-character-button {
+    position: sticky;
+    bottom: 16px;
+
+    width: 100%;
+
+    box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
+}
