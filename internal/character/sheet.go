@@ -11,6 +11,9 @@ const (
 	DefaultWeaponRows      = 5
 	DefaultReadiedItemRows = 10
 	DefaultStowedItemRows  = 20
+	MaxSpellRows           = 50
+	MaxMagicArtRows        = 25
+	MaxMagicTraditionRows  = 50
 )
 
 // Sheet содержит все данные листа,
@@ -69,6 +72,10 @@ type Sheet struct {
 	// Позже при желании сюда можно добавить изображение.
 	Property      Property `json:"property"`
 	SketchOrSigil string   `json:"sketch_or_sigil"`
+
+	Spells          []Spell          `json:"spells"`
+	MagicTraditions []MagicTradition `json:"magic_traditions"`
+	MagicArts       []MagicArt       `json:"magic_arts"`
 }
 
 // Attributes.
@@ -188,6 +195,26 @@ type Property struct {
 	StoredPossessions string `json:"stored_possessions"`
 }
 
+type Spell struct {
+	Name        string `json:"name"`
+	Tradition   string `json:"tradition"`
+	Level       string `json:"level"`
+	Description string `json:"description"`
+}
+
+type MagicTradition struct {
+	Name          string `json:"name"`
+	EffortMax     string `json:"effort_max"`
+	EffortCurrent string `json:"effort_current"`
+}
+
+type MagicArt struct {
+	Name          string `json:"name"`
+	Tradition     string `json:"tradition"`
+	EffortSpentOn string `json:"effort_spent_on"`
+	Description   string `json:"description"`
+}
+
 // EnsureRows гарантирует, что новый или старый персонаж
 // получает несколько пустых строк для редактирования.
 //
@@ -219,6 +246,27 @@ func (s *Sheet) EnsureRows() {
 		s.StowedItems = append(
 			s.StowedItems,
 			StowedItem{},
+		)
+	}
+
+	if len(s.Spells) == 0 {
+		s.Spells = append(
+			s.Spells,
+			Spell{},
+		)
+	}
+
+	if len(s.MagicTraditions) == 0 {
+		s.MagicTraditions = append(
+			s.MagicTraditions,
+			MagicTradition{},
+		)
+	}
+
+	if len(s.MagicArts) == 0 {
+		s.MagicArts = append(
+			s.MagicArts,
+			MagicArt{},
 		)
 	}
 }

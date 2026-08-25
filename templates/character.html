@@ -15,6 +15,11 @@
         rel="stylesheet"
         href="/static/css/style.css"
     >
+    <script
+        src="/static/js/character.js"
+        defer
+    >
+    </script>
 </head>
 
 
@@ -1366,7 +1371,306 @@
 
         </details>
 
+<!-- =========================================
+     ЗАКЛИНАНИЯ
+========================================== -->
 
+<details class="sheet-section collapsible">
+
+    <summary>
+        ЗАКЛИНАНИЯ
+    </summary>
+
+    <div class="collapsible-content">
+
+        <div
+            id="spells-list"
+            class="magic-entry-list"
+            data-next-index="{{len .Sheet.Spells}}"
+        >
+
+            {{range $i, $spell := .Sheet.Spells}}
+
+                <div class="magic-entry-card">
+
+                    <div class="magic-entry-header">
+
+                        <div class="field">
+
+                            <label>
+                                Название
+                            </label>
+
+                            <input
+                                name="spell_name_{{$i}}"
+                                type="text"
+                                value="{{$spell.Name}}"
+                            >
+
+                        </div>
+
+
+                        <div class="field magic-level-field">
+
+                            <label>
+                                Уровень
+                            </label>
+
+                            <input
+                                name="spell_level_{{$i}}"
+                                type="text"
+                                value="{{$spell.Level}}"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Традиция
+                        </label>
+
+                        <input
+                            name="spell_tradition_{{$i}}"
+                            type="text"
+                            value="{{$spell.Tradition}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Описание
+                        </label>
+
+                        <textarea
+                            name="spell_description_{{$i}}"
+                            rows="5"
+                        >{{$spell.Description}}</textarea>
+
+                    </div>
+
+                </div>
+
+            {{end}}
+
+        </div>
+
+
+        <button
+            id="add-spell"
+            class="add-entry-button"
+            type="button"
+        >
+            + Добавить заклинание
+        </button>
+
+    </div>
+
+</details>
+
+<!-- =========================================
+     МАГИЧЕСКИЕ ИСКУССТВА
+========================================== -->
+
+<details class="sheet-section collapsible">
+
+    <summary>
+        МАГИЧЕСКИЕ ИСКУССТВА
+    </summary>
+
+    <div class="collapsible-content">
+
+
+        <!-- ТРАДИЦИИ -->
+
+        <div class="magic-subsection">
+
+            <h3>
+                Традиции
+            </h3>
+
+
+            <div
+                id="magic-traditions-list"
+                class="traditions-list"
+                data-next-index="{{len .Sheet.MagicTraditions}}"
+            >
+
+                {{range $i, $tradition := .Sheet.MagicTraditions}}
+
+                    <div class="tradition-row">
+
+                        <div class="field">
+
+                            <label>
+                                Традиция
+                            </label>
+
+                            <input
+                                name="magic_tradition_name_{{$i}}"
+                                type="text"
+                                value="{{$tradition.Name}}"
+                            >
+
+                        </div>
+
+
+                        <div class="field tradition-effort">
+
+                            <label>
+                                Усилия макс.
+                            </label>
+
+                            <input
+                                name="magic_tradition_max_{{$i}}"
+                                type="text"
+                                value="{{$tradition.EffortMax}}"
+                            >
+
+                        </div>
+
+
+                        <div class="field tradition-effort">
+
+                            <label>
+                                Текущие
+                            </label>
+
+                            <input
+                                name="magic_tradition_current_{{$i}}"
+                                type="text"
+                                value="{{$tradition.EffortCurrent}}"
+                            >
+
+                        </div>
+
+                    </div>
+
+                {{end}}
+
+            </div>
+
+
+            <button
+                id="add-magic-tradition"
+                class="add-entry-button small-add-button"
+                type="button"
+            >
+                + Добавить традицию
+            </button>
+
+        </div>
+
+
+        <!-- ИСКУССТВА -->
+
+        <div class="magic-subsection">
+
+            <h3>
+                Искусства
+            </h3>
+
+
+            <div
+                id="magic-arts-list"
+                class="magic-entry-list"
+                data-next-index="{{len .Sheet.MagicArts}}"
+            >
+
+                {{range $i, $art := .Sheet.MagicArts}}
+
+                    <div class="magic-entry-card">
+
+                        <div class="magic-entry-header">
+
+                            <div class="field">
+
+                                <label>
+                                    Название
+                                </label>
+
+                                <input
+                                    name="magic_art_name_{{$i}}"
+                                    type="text"
+                                    value="{{$art.Name}}"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Традиция
+                                </label>
+
+                                <input
+                                    name="magic_art_tradition_{{$i}}"
+                                    type="text"
+                                    value="{{$art.Tradition}}"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Усилие тратится на
+                            </label>
+
+                            <input
+                                name="magic_art_effort_{{$i}}"
+                                type="text"
+                                list="effort-spend-options"
+                                value="{{$art.EffortSpentOn}}"
+                                placeholder="На сцену / На день / Постоянно"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Описание искусства
+                            </label>
+
+                            <textarea
+                                name="magic_art_description_{{$i}}"
+                                rows="5"
+                            >{{$art.Description}}</textarea>
+
+                        </div>
+
+                    </div>
+
+                {{end}}
+
+            </div>
+
+
+            <button
+                id="add-magic-art"
+                class="add-entry-button"
+                type="button"
+            >
+                + Добавить искусство
+            </button>
+
+        </div>
+
+    </div>
+
+</details>
 
         <!-- =========================================
              О ПЕРСОНАЖЕ
@@ -1500,6 +1804,197 @@
     </form>
 
 </main>
+
+<template id="spell-template">
+
+    <div class="magic-entry-card">
+
+        <div class="magic-entry-header">
+
+            <div class="field">
+
+                <label>
+                    Название
+                </label>
+
+                <input
+                    name="spell_name___INDEX__"
+                    type="text"
+                >
+
+            </div>
+
+
+            <div class="field magic-level-field">
+
+                <label>
+                    Уровень
+                </label>
+
+                <input
+                    name="spell_level___INDEX__"
+                    type="text"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Традиция
+            </label>
+
+            <input
+                name="spell_tradition___INDEX__"
+                type="text"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Описание
+            </label>
+
+            <textarea
+                name="spell_description___INDEX__"
+                rows="5"
+            ></textarea>
+
+        </div>
+
+    </div>
+
+</template>
+
+<datalist id="effort-spend-options">
+    <option value="На сцену">
+    <option value="На день">
+    <option value="Постоянно">
+</datalist>
+
+<template id="magic-tradition-template">
+
+    <div class="tradition-row">
+
+        <div class="field">
+
+            <label>
+                Традиция
+            </label>
+
+            <input
+                name="magic_tradition_name___INDEX__"
+                type="text"
+            >
+
+        </div>
+
+
+        <div class="field tradition-effort">
+
+            <label>
+                Усилия макс.
+            </label>
+
+            <input
+                name="magic_tradition_max___INDEX__"
+                type="text"
+            >
+
+        </div>
+
+
+        <div class="field tradition-effort">
+
+            <label>
+                Текущие
+            </label>
+
+            <input
+                name="magic_tradition_current___INDEX__"
+                type="text"
+            >
+
+        </div>
+
+    </div>
+
+</template>
+
+<template id="magic-art-template">
+
+    <div class="magic-entry-card">
+
+        <div class="magic-entry-header">
+
+            <div class="field">
+
+                <label>
+                    Название
+                </label>
+
+                <input
+                    name="magic_art_name___INDEX__"
+                    type="text"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Традиция
+                </label>
+
+                <input
+                    name="magic_art_tradition___INDEX__"
+                    type="text"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Усилие тратится на
+            </label>
+
+            <input
+                name="magic_art_effort___INDEX__"
+                type="text"
+                list="effort-spend-options"
+                placeholder="На сцену / На день / Постоянно"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Описание искусства
+            </label>
+
+            <textarea
+                name="magic_art_description___INDEX__"
+                rows="5"
+            ></textarea>
+
+        </div>
+
+    </div>
+
+</template>
 
 </body>
 

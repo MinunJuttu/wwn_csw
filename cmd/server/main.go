@@ -1222,6 +1222,128 @@ func (app *application) characterPost(
 		)
 	}
 
+	for i := 0; i < character.MaxSpellRows; i++ {
+		name := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("spell_name_%d", i),
+			),
+		)
+
+		tradition := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("spell_tradition_%d", i),
+			),
+		)
+
+		level := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("spell_level_%d", i),
+			),
+		)
+
+		description := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("spell_description_%d", i),
+			),
+		)
+
+		// Совсем пустые слоты не сохраняем.
+		if name == "" &&
+			tradition == "" &&
+			level == "" &&
+			description == "" {
+			continue
+		}
+
+		sheet.Spells = append(
+			sheet.Spells,
+			character.Spell{
+				Name:        name,
+				Tradition:   tradition,
+				Level:       level,
+				Description: description,
+			},
+		)
+	}
+
+	for i := 0; i < character.MaxMagicTraditionRows; i++ {
+		name := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_tradition_name_%d", i),
+			),
+		)
+
+		effortMax := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_tradition_max_%d", i),
+			),
+		)
+
+		effortCurrent := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_tradition_current_%d", i),
+			),
+		)
+
+		if name == "" &&
+			effortMax == "" &&
+			effortCurrent == "" {
+			continue
+		}
+
+		sheet.MagicTraditions = append(
+			sheet.MagicTraditions,
+			character.MagicTradition{
+				Name:          name,
+				EffortMax:     effortMax,
+				EffortCurrent: effortCurrent,
+			},
+		)
+	}
+
+	for i := 0; i < character.MaxMagicArtRows; i++ {
+		name := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_art_name_%d", i),
+			),
+		)
+
+		tradition := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_art_tradition_%d", i),
+			),
+		)
+
+		effortSpentOn := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_art_effort_%d", i),
+			),
+		)
+
+		description := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("magic_art_description_%d", i),
+			),
+		)
+
+		if name == "" &&
+			tradition == "" &&
+			effortSpentOn == "" &&
+			description == "" {
+			continue
+		}
+
+		sheet.MagicArts = append(
+			sheet.MagicArts,
+			character.MagicArt{
+				Name:          name,
+				Tradition:     tradition,
+				EffortSpentOn: effortSpentOn,
+				Description:   description,
+			},
+		)
+	}
+
 	for i := 0; i < character.DefaultWeaponRows; i++ {
 		sheet.Weapons = append(
 			sheet.Weapons,
