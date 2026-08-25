@@ -326,3 +326,694 @@ button:hover,
 
     box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
 }
+
+.character-title-grid {
+    display: grid;
+    grid-template-columns: 1fr 72px;
+    gap: 12px;
+}
+
+.character-name-field input {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.level-field input {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.sheet-section h2 {
+    margin-bottom: 16px;
+
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.field textarea {
+    width: 100%;
+    padding: 10px;
+
+    font: inherit;
+
+    resize: vertical;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.attribute-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+}
+
+.attribute-values input {
+    min-width: 0;
+}
+
+.attribute-values input:last-child {
+    font-size: 14px;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.resource-box {
+    padding: 12px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.resource-box strong {
+    display: block;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+}
+
+.resource-values {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 5px;
+    align-items: center;
+}
+
+.resource-values input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px 4px;
+
+    font: inherit;
+    font-size: 18px;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.four-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.small-stat {
+    min-width: 0;
+}
+
+.small-stat label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.small-stat input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px 2px;
+
+    font: inherit;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.section-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.section-title-row h2 {
+    margin-bottom: 16px;
+}
+
+.skill-points-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: 12px;
+}
+
+.skill-points-field input {
+    width: 54px;
+    padding: 6px;
+
+    font: inherit;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 7px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+}
+
+.skills-grid label {
+    display: grid;
+    grid-template-columns: 1fr 46px;
+    align-items: center;
+    gap: 6px;
+}
+
+.skills-grid span {
+    font-size: 14px;
+}
+
+.skills-grid input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 7px 3px;
+
+    font: inherit;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 7px;
+}
+
+.work-skill {
+    display: grid;
+    grid-template-columns: 1fr 46px;
+    gap: 6px;
+
+    margin-top: 6px;
+}
+
+.work-skill input {
+    min-width: 0;
+    padding: 7px;
+
+    font: inherit;
+
+    border: 1px solid #bbb;
+    border-radius: 7px;
+}
+
+.repeat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+.focus-row,
+.inventory-slot {
+    grid-template-columns: 28px 1fr 64px;
+}
+
+.focus-row input,
+.item-row input {
+    min-width: 0;
+    padding: 9px;
+
+    font: inherit;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.focus-level,
+.item-encumbrance {
+    text-align: center;
+}
+
+.weapon-row {
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #eee;
+}
+
+.weapon-row:last-child {
+    border-bottom: 0;
+}
+
+.weapon-row input {
+    width: 100%;
+    min-width: 0;
+
+    padding: 9px;
+
+    font: inherit;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.weapon-name {
+    margin-bottom: 6px;
+
+    font-weight: 600;
+}
+
+.weapon-stats {
+    display: grid;
+    grid-template-columns: 64px 1fr 1fr;
+    gap: 6px;
+
+    margin-bottom: 6px;
+}
+
+.weapon-stats label span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 10px;
+    color: #666;
+}
+
+@media (max-width: 420px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .sheet-section {
+        padding: 12px;
+    }
+
+    .four-grid {
+        gap: 5px;
+    }
+
+    .small-stat label {
+        font-size: 10px;
+    }
+}
+
+.skill-points-group {
+    display: flex;
+    gap: 10px;
+}
+
+.money-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.collapsible {
+    padding: 0;
+    overflow: hidden;
+}
+
+.collapsible summary {
+    padding: 16px;
+
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+
+    list-style: none;
+}
+
+.collapsible summary::-webkit-details-marker {
+    display: none;
+}
+
+.collapsible summary::after {
+    content: "+";
+
+    float: right;
+
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.collapsible[open] summary::after {
+    content: "−";
+}
+
+.collapsible[open] summary {
+    border-bottom: 1px solid #eee;
+}
+
+.collapsible-content {
+    padding: 16px;
+}
+
+.skill-points-group {
+    display: flex;
+    gap: 10px;
+}
+
+.money-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+
+/* Сворачиваемые секции */
+
+.collapsible {
+    padding: 0;
+    overflow: hidden;
+}
+
+.collapsible summary {
+    padding: 16px;
+
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+    user-select: none;
+
+    list-style: none;
+}
+
+.collapsible summary::-webkit-details-marker {
+    display: none;
+}
+
+.collapsible summary::after {
+    content: "+";
+
+    float: right;
+
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.collapsible[open] summary::after {
+    content: "−";
+}
+
+.collapsible[open] summary {
+    border-bottom: 1px solid #eee;
+}
+
+.collapsible-content {
+    padding: 16px;
+}
+
+.collapsible-content > .field + .field {
+    margin-top: 16px;
+}
+/* =========================
+   ИНВЕНТАРЬ
+========================= */
+
+.inventory-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-bottom: 16px;
+}
+
+.inventory-hint {
+    max-width: 280px;
+
+    font-size: 12px;
+    line-height: 1.35;
+
+    color: #777;
+}
+
+.inventory-max {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.inventory-max span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.inventory-max input {
+    width: 58px;
+    padding: 8px 5px;
+
+    font: inherit;
+    text-align: center;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+
+/* Таблица */
+
+.inventory-table {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inventory-table-header {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) 64px;
+    gap: 8px;
+
+    padding: 0 5px 3px;
+
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+
+    color: #888;
+}
+
+.inventory-table-header span:last-child {
+    text-align: center;
+}
+
+
+/* Одна строка */
+
+.inventory-row {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) 64px;
+    gap: 8px;
+    align-items: center;
+
+    padding: 5px;
+
+    border-radius: 9px;
+
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.inventory-row input[type="text"] {
+    min-width: 0;
+    width: 100%;
+
+    padding: 9px 10px;
+
+    font: inherit;
+
+    background: white;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.inventory-item-weight {
+    text-align: center;
+}
+
+
+/* Переключатель слота */
+
+.slot-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 100%;
+
+    cursor: pointer;
+}
+
+.slot-toggle {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.slot-toggle-icon {
+    display: block;
+
+    width: 17px;
+    height: 17px;
+
+    background: white;
+
+    border: 1.5px solid #aaa;
+    border-radius: 50%;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.slot-toggle-label:hover .slot-toggle-icon {
+    border-color: #555;
+}
+
+.slot-toggle:checked + .slot-toggle-icon {
+    background: #555;
+    border-color: #555;
+}
+
+.slot-toggle:active + .slot-toggle-icon {
+    transform: scale(0.85);
+}
+
+
+/* Недоступная строка */
+
+.inventory-row:has(.slot-toggle:checked) {
+    background: #e3e3e3;
+}
+
+.inventory-row:has(.slot-toggle:checked)
+input[type="text"] {
+    opacity: 0.4;
+
+    background: #eee;
+}
+
+.inventory-row:has(.slot-toggle:checked)
+.slot-toggle-icon {
+    opacity: 1;
+}
+
+
+/* Мобильный экран */
+
+@media (max-width: 420px) {
+
+    .inventory-toolbar {
+        align-items: flex-end;
+    }
+
+    .inventory-hint {
+        max-width: 190px;
+        font-size: 11px;
+    }
+
+    .inventory-table-header,
+    .inventory-row {
+        grid-template-columns: 24px minmax(0, 1fr) 58px;
+        gap: 6px;
+    }
+
+    .inventory-row {
+        padding: 4px;
+    }
+
+    .inventory-row input[type="text"] {
+        padding: 9px 8px;
+    }
+}
+/* Когда игрок нажал на квадрат */
+
+.slot-toggle:checked + .slot-toggle-icon {
+    background: #666;
+    border-color: #666;
+}
+
+
+/* Затемняем всю строку */
+
+.inventory-slot:has(.slot-toggle:checked) {
+    opacity: 0.42;
+    background: #ddd;
+}
+
+
+/* При этом переключатель остаётся хорошо видимым */
+
+.inventory-slot:has(.slot-toggle:checked)
+.slot-toggle-label {
+    opacity: 1;
+}
+
+/* =========================
+   ЧЕРТЫ
+========================= */
+
+.traits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.trait-card {
+    padding: 12px;
+
+    background: #f8f8f8;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.trait-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 80px;
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.trait-level input {
+    text-align: center;
+}
+
+.trait-card textarea {
+    min-height: 90px;
+}
+
+@media (max-width: 420px) {
+    .trait-header {
+        grid-template-columns: minmax(0, 1fr) 68px;
+    }
+}

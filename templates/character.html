@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
 
@@ -8,7 +9,7 @@
         content="width=device-width, initial-scale=1"
     >
 
-    <title>{{.Character.Name}} — WWN Character Sheet</title>
+    <title>{{.Character.Name}} — WWN</title>
 
     <link
         rel="stylesheet"
@@ -16,244 +17,371 @@
     >
 </head>
 
+
 <body>
 
-    <main class="container character-sheet">
+<main class="container character-sheet">
 
-        <a
-            class="back-link"
-            href="/characters"
-        >
-            ← Персонажи
-        </a>
-
-
-        {{if .Saved}}
-
-            <div class="message success">
-                Персонаж сохранён.
-            </div>
-
-        {{end}}
+    <a
+        class="back-link"
+        href="/characters"
+    >
+        ← Персонажи
+    </a>
 
 
-        {{if .Error}}
+    {{if .Saved}}
 
-            <div class="message error">
-                {{.Error}}
-            </div>
+        <div class="message success">
+            Персонаж сохранён.
+        </div>
 
-        {{end}}
-
-
-        <form
-            method="post"
-            action="/characters/{{.Character.ID}}"
-        >
-
-            <section class="sheet-section">
-
-                <h1>Персонаж</h1>
-
-                <div class="sheet-grid">
-
-                    <div class="field field-wide">
-
-                        <label for="name">
-                            Имя
-                        </label>
-
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            value="{{.Character.Name}}"
-                            maxlength="100"
-                            required
-                        >
-
-                    </div>
+    {{end}}
 
 
-                    <div class="field">
+    {{if .Error}}
 
-                        <label for="level">
-                            Уровень
-                        </label>
+        <div class="message error">
+            {{.Error}}
+        </div>
 
-                        <input
-                            id="level"
-                            name="level"
-                            type="number"
-                            value="{{.Character.Level}}"
-                        >
-
-                    </div>
+    {{end}}
 
 
-                    <div class="field">
+    <form
+        method="post"
+        action="/characters/{{.Character.ID}}"
+    >
 
-                        <label for="class">
-                            Класс
-                        </label>
 
-                        <input
-                            id="class"
-                            name="class"
-                            type="text"
-                            value="{{.Character.Class}}"
-                        >
+        <!-- =========================================
+             ОСНОВНАЯ ИНФОРМАЦИЯ
+        ========================================== -->
 
-                    </div>
+        <section class="sheet-section">
+
+            <div class="character-title-grid">
+
+                <div class="field character-name-field">
+
+                    <label for="name">
+                        Имя персонажа
+                    </label>
+
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        value="{{.Character.Name}}"
+                        maxlength="100"
+                        required
+                    >
 
                 </div>
 
-            </section>
+
+                <div class="field level-field">
+
+                    <label for="level">
+                        Уровень
+                    </label>
+
+                    <input
+                        id="level"
+                        name="level"
+                        type="number"
+                        value="{{.Character.Level}}"
+                        required
+                    >
+
+                </div>
+
+            </div>
 
 
-            <section class="sheet-section">
+            <div class="sheet-grid">
 
-                <h2>Характеристики</h2>
+                <div class="field">
 
-                <div class="attributes-grid">
+                    <label for="class">
+                        Класс
+                    </label>
 
-                    <div class="attribute">
+                    <input
+                        id="class"
+                        name="class"
+                        type="text"
+                        value="{{.Character.Class}}"
+                    >
 
-                        <label for="strength">
-                            STR
-                        </label>
+                </div>
+
+
+                <div class="field">
+
+                    <label for="xp">
+                        XP
+                    </label>
+
+                    <input
+                        id="xp"
+                        name="xp"
+                        type="text"
+                        value="{{.Sheet.XP}}"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="background">
+                        Предыстория
+                    </label>
+
+                    <input
+                        id="background"
+                        name="background"
+                        type="text"
+                        value="{{.Sheet.Background}}"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="player">
+                        Игрок
+                    </label>
+
+                    <input
+                        id="player"
+                        name="player"
+                        type="text"
+                        value="{{.Sheet.Player}}"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             ХАРАКТЕРИСТИКИ
+        ========================================== -->
+
+        <section class="sheet-section">
+
+            <h2>ХАРАКТЕРИСТИКИ</h2>
+
+
+            <div class="attributes-grid">
+
+
+                <div class="attribute">
+
+                    <label>
+                        СИЛА
+                    </label>
+
+                    <div class="attribute-values">
 
                         <input
-                            id="strength"
                             name="strength"
-                            type="number"
+                            type="text"
                             value="{{.Sheet.Attributes.Strength}}"
                         >
 
-                    </div>
-
-
-                    <div class="attribute">
-
-                        <label for="dexterity">
-                            DEX
-                        </label>
-
                         <input
-                            id="dexterity"
-                            name="dexterity"
-                            type="number"
-                            value="{{.Sheet.Attributes.Dexterity}}"
-                        >
-
-                    </div>
-
-
-                    <div class="attribute">
-
-                        <label for="constitution">
-                            CON
-                        </label>
-
-                        <input
-                            id="constitution"
-                            name="constitution"
-                            type="number"
-                            value="{{.Sheet.Attributes.Constitution}}"
-                        >
-
-                    </div>
-
-
-                    <div class="attribute">
-
-                        <label for="intelligence">
-                            INT
-                        </label>
-
-                        <input
-                            id="intelligence"
-                            name="intelligence"
-                            type="number"
-                            value="{{.Sheet.Attributes.Intelligence}}"
-                        >
-
-                    </div>
-
-
-                    <div class="attribute">
-
-                        <label for="wisdom">
-                            WIS
-                        </label>
-
-                        <input
-                            id="wisdom"
-                            name="wisdom"
-                            type="number"
-                            value="{{.Sheet.Attributes.Wisdom}}"
-                        >
-
-                    </div>
-
-
-                    <div class="attribute">
-
-                        <label for="charisma">
-                            CHA
-                        </label>
-
-                        <input
-                            id="charisma"
-                            name="charisma"
-                            type="number"
-                            value="{{.Sheet.Attributes.Charisma}}"
+                            name="strength_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.StrengthMod}}"
+                            placeholder="МОД"
                         >
 
                     </div>
 
                 </div>
 
-            </section>
 
 
-            <section class="sheet-section">
+                <div class="attribute">
 
-                <h2>HP</h2>
+                    <label>
+                        ЛОВКОСТЬ
+                    </label>
 
-                <div class="hp-row">
-
-                    <div class="field">
-
-                        <label for="hp_current">
-                            Текущие
-                        </label>
+                    <div class="attribute-values">
 
                         <input
-                            id="hp_current"
-                            name="hp_current"
-                            type="number"
-                            value="{{.Sheet.HP.Current}}"
+                            name="dexterity"
+                            type="text"
+                            value="{{.Sheet.Attributes.Dexterity}}"
+                        >
+
+                        <input
+                            name="dexterity_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.DexterityMod}}"
+                            placeholder="МОД"
                         >
 
                     </div>
 
-
-                    <div class="hp-separator">
-                        /
-                    </div>
+                </div>
 
 
-                    <div class="field">
 
-                        <label for="hp_max">
-                            Максимум
-                        </label>
+                <div class="attribute">
+
+                    <label>
+                        ТЕЛОСЛОЖЕНИЕ
+                    </label>
+
+                    <div class="attribute-values">
 
                         <input
-                            id="hp_max"
+                            name="constitution"
+                            type="text"
+                            value="{{.Sheet.Attributes.Constitution}}"
+                        >
+
+                        <input
+                            name="constitution_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.ConstitutionMod}}"
+                            placeholder="МОД"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="attribute">
+
+                    <label>
+                        ИНТЕЛЛЕКТ
+                    </label>
+
+                    <div class="attribute-values">
+
+                        <input
+                            name="intelligence"
+                            type="text"
+                            value="{{.Sheet.Attributes.Intelligence}}"
+                        >
+
+                        <input
+                            name="intelligence_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.IntelligenceMod}}"
+                            placeholder="МОД"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="attribute">
+
+                    <label>
+                        МУДРОСТЬ
+                    </label>
+
+                    <div class="attribute-values">
+
+                        <input
+                            name="wisdom"
+                            type="text"
+                            value="{{.Sheet.Attributes.Wisdom}}"
+                        >
+
+                        <input
+                            name="wisdom_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.WisdomMod}}"
+                            placeholder="МОД"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="attribute">
+
+                    <label>
+                        ХАРИЗМА
+                    </label>
+
+                    <div class="attribute-values">
+
+                        <input
+                            name="charisma"
+                            type="text"
+                            value="{{.Sheet.Attributes.Charisma}}"
+                        >
+
+                        <input
+                            name="charisma_mod"
+                            type="text"
+                            value="{{.Sheet.Attributes.CharismaMod}}"
+                            placeholder="МОД"
+                        >
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             ЗДОРОВЬЕ
+        ========================================== -->
+
+        <section class="sheet-section">
+
+            <h2>ЗДОРОВЬЕ</h2>
+
+
+            <div class="resources-grid">
+
+
+                <div class="resource-box">
+
+                    <strong>
+                        HP
+                    </strong>
+
+                    <div class="resource-values">
+
+                        <input
+                            name="hp_current"
+                            type="text"
+                            value="{{.Sheet.HP.Current}}"
+                        >
+
+                        <span>
+                            /
+                        </span>
+
+                        <input
                             name="hp_max"
-                            type="number"
+                            type="text"
                             value="{{.Sheet.HP.Max}}"
                         >
 
@@ -261,19 +389,1118 @@
 
                 </div>
 
-            </section>
 
 
-            <button
-                class="save-character-button"
-                type="submit"
-            >
-                Сохранить
-            </button>
+                <div class="resource-box">
 
-        </form>
+                    <strong>
+                        Очки Истощения
+                    </strong>
 
-    </main>
+                    <div class="resource-values">
+
+                        <input
+                            name="system_strain_current"
+                            type="text"
+                            value="{{.Sheet.SystemStrain.Current}}"
+                        >
+
+                        <span>
+                            /
+                        </span>
+
+                        <input
+                            name="system_strain_max"
+                            type="text"
+                            value="{{.Sheet.SystemStrain.Max}}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             СПАСБРОСКИ
+        ========================================== -->
+
+        <section class="sheet-section">
+
+            <h2>Спасброски</h2>
+
+
+            <div class="four-grid">
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Стойкость
+                    </label>
+
+                    <input
+                        name="save_physical"
+                        type="text"
+                        value="{{.Sheet.Saves.Physical}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Уклонение
+                    </label>
+
+                    <input
+                        name="save_evasion"
+                        type="text"
+                        value="{{.Sheet.Saves.Evasion}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Воля
+                    </label>
+
+                    <input
+                        name="save_mental"
+                        type="text"
+                        value="{{.Sheet.Saves.Mental}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Удача
+                    </label>
+
+                    <input
+                        name="save_luck"
+                        type="text"
+                        value="{{.Sheet.Saves.Luck}}"
+                    >
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             БОЙ
+        ========================================== -->
+
+        <section class="sheet-section">
+
+            <h2>БОЙ</h2>
+
+
+            <div class="four-grid">
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Базовый бонус атаки
+                    </label>
+
+                    <input
+                        name="base_attack_bonus"
+                        type="text"
+                        value="{{.Sheet.Combat.BaseAttackBonus}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Ближний бой
+                    </label>
+
+                    <input
+                        name="melee_attack"
+                        type="text"
+                        value="{{.Sheet.Combat.MeleeAttack}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Дальний бой
+                    </label>
+
+                    <input
+                        name="ranged_attack"
+                        type="text"
+                        value="{{.Sheet.Combat.RangedAttack}}"
+                    >
+
+                </div>
+
+
+                <div class="small-stat">
+
+                    <label>
+                        Инициатива
+                    </label>
+
+                    <input
+                        name="initiative"
+                        type="text"
+                        value="{{.Sheet.Combat.Initiative}}"
+                    >
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             БРОНЯ
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+        <details class="sheet-section collapsible">
+
+            <summary>
+                БРОНЯ
+            </summary>
+
+
+            <div class="collapsible-content">
+
+                <div class="sheet-grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Класс брони
+                        </label>
+
+                        <input
+                            name="armor_class"
+                            type="text"
+                            value="{{.Sheet.Armor.AC}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Модификатор ЛОВ
+                        </label>
+
+                        <input
+                            name="armor_dex_mod"
+                            type="text"
+                            value="{{.Sheet.Armor.DexMod}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field field-wide">
+
+                        <label>
+                            Надетая броня
+                        </label>
+
+                        <input
+                            name="worn_armor"
+                            type="text"
+                            value="{{.Sheet.Armor.WornArmor}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field field-wide">
+
+                        <label>
+                            Особые свойства
+                        </label>
+
+                        <input
+                            name="armor_special"
+                            type="text"
+                            value="{{.Sheet.Armor.Special}}"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </details>
+
+
+
+        <!-- =========================================
+             НАВЫКИ
+        ========================================== -->
+
+        <section class="sheet-section">
+
+
+            <div class="section-title-row">
+
+                <h2>
+                    Навыки
+                </h2>
+
+
+                <div class="skill-points-group">
+
+
+                    <div class="skill-points-field">
+
+                        <label>
+                            Очки навыков
+                        </label>
+
+                        <input
+                            name="skill_points"
+                            type="text"
+                            value="{{.Sheet.SkillPoints}}"
+                        >
+
+                    </div>
+
+
+                    <div class="skill-points-field">
+
+                        <label>
+                            ОН Эксперта
+                        </label>
+
+                        <input
+                            name="expert_points"
+                            type="text"
+                            value="{{.Sheet.ExpertPoints}}"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <div class="skills-grid">
+
+
+                <label>
+                    <span>Администрирование</span>
+                    <input name="skill_administer" type="text" value="{{.Sheet.Skills.Administer}}">
+                </label>
+
+
+                <label>
+                    <span>Связи</span>
+                    <input name="skill_connect" type="text" value="{{.Sheet.Skills.Connect}}">
+                </label>
+
+
+                <label>
+                    <span>Убеждение</span>
+                    <input name="skill_convince" type="text" value="{{.Sheet.Skills.Convince}}">
+                </label>
+
+
+                <label>
+                    <span>Ремесло</span>
+                    <input name="skill_craft" type="text" value="{{.Sheet.Skills.Craft}}">
+                </label>
+
+
+                <label>
+                    <span>Атлетика</span>
+                    <input name="skill_exert" type="text" value="{{.Sheet.Skills.Exert}}">
+                </label>
+
+
+                <label>
+                    <span>Лечение</span>
+                    <input name="skill_heal" type="text" value="{{.Sheet.Skills.Heal}}">
+                </label>
+
+
+                <label>
+                    <span>Знания</span>
+                    <input name="skill_know" type="text" value="{{.Sheet.Skills.Know}}">
+                </label>
+
+
+                <label>
+                    <span>Лидерство</span>
+                    <input name="skill_lead" type="text" value="{{.Sheet.Skills.Lead}}">
+                </label>
+
+
+                <label>
+                    <span>Магия</span>
+                    <input name="skill_magic" type="text" value="{{.Sheet.Skills.Magic}}">
+                </label>
+
+
+                <label>
+                    <span>Внимание</span>
+                    <input name="skill_notice" type="text" value="{{.Sheet.Skills.Notice}}">
+                </label>
+
+
+                <label>
+                    <span>Выступление</span>
+                    <input name="skill_perform" type="text" value="{{.Sheet.Skills.Perform}}">
+                </label>
+
+
+                <label>
+                    <span>Религия</span>
+                    <input name="skill_pray" type="text" value="{{.Sheet.Skills.Pray}}">
+                </label>
+
+
+                <label>
+                    <span>Рукопашный бой</span>
+                    <input name="skill_punch" type="text" value="{{.Sheet.Skills.Punch}}">
+                </label>
+
+
+                <label>
+                    <span>Верховая езда</span>
+                    <input name="skill_ride" type="text" value="{{.Sheet.Skills.Ride}}">
+                </label>
+
+
+                <label>
+                    <span>Мореплавание</span>
+                    <input name="skill_sail" type="text" value="{{.Sheet.Skills.Sail}}">
+                </label>
+
+
+                <label>
+                    <span>Стрельба</span>
+                    <input name="skill_shoot" type="text" value="{{.Sheet.Skills.Shoot}}">
+                </label>
+
+
+                <label>
+                    <span>Скрытность</span>
+                    <input name="skill_sneak" type="text" value="{{.Sheet.Skills.Sneak}}">
+                </label>
+
+
+                <label>
+                    <span>Фехтование</span>
+                    <input name="skill_stab" type="text" value="{{.Sheet.Skills.Stab}}">
+                </label>
+
+
+                <label>
+                    <span>Выживание</span>
+                    <input name="skill_survive" type="text" value="{{.Sheet.Skills.Survive}}">
+                </label>
+
+
+                <label>
+                    <span>Торговля</span>
+                    <input name="skill_trade" type="text" value="{{.Sheet.Skills.Trade}}">
+                </label>
+
+
+            </div>
+
+
+            <div class="work-skill">
+
+                <input
+                    class="work-name"
+                    name="skill_work_name"
+                    type="text"
+                    value="{{.Sheet.Skills.WorkName}}"
+                    placeholder="Работа"
+                >
+
+                <input
+                    name="skill_work"
+                    type="text"
+                    value="{{.Sheet.Skills.Work}}"
+                >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             ОРУЖИЕ
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+        <details class="sheet-section collapsible">
+
+            <summary>
+                ОРУЖИЕ
+            </summary>
+
+
+            <div class="collapsible-content">
+
+
+                <div class="repeat-list">
+
+
+                    {{range $i, $weapon := .Sheet.Weapons}}
+
+
+                        <div class="weapon-row">
+
+
+                            <input
+                                class="weapon-name"
+                                name="weapon_name_{{$i}}"
+                                type="text"
+                                value="{{$weapon.Name}}"
+                                placeholder="Оружие"
+                            >
+
+
+                            <div class="weapon-stats">
+
+
+                                <label>
+
+                                    <span>
+                                        Бонус атаки
+                                    </span>
+
+                                    <input
+                                        name="weapon_hit_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.HitBonus}}"
+                                    >
+
+                                </label>
+
+
+                                <label>
+
+                                    <span>
+                                        Урон
+                                    </span>
+
+                                    <input
+                                        name="weapon_damage_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.Damage}}"
+                                    >
+
+                                </label>
+
+
+                                <label>
+
+                                    <span>
+                                        Дальность
+                                    </span>
+
+                                    <input
+                                        name="weapon_range_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.Range}}"
+                                    >
+
+                                </label>
+
+
+                            </div>
+
+
+                            <input
+                                name="weapon_special_{{$i}}"
+                                type="text"
+                                value="{{$weapon.SpecialShock}}"
+                                placeholder="Shock / особые свойства"
+                            >
+
+
+                        </div>
+
+
+                    {{end}}
+
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Боеприпасы
+                    </label>
+
+                    <input
+                        name="ammunition"
+                        type="text"
+                        value="{{.Sheet.Ammunition}}"
+                    >
+
+                </div>
+
+
+            </div>
+
+        </details>
+
+
+
+<!-- =========================================
+     ЧЕРТЫ
+     СВОРАЧИВАЕМЫЙ БЛОК
+========================================== -->
+
+<details class="sheet-section collapsible">
+
+    <summary>
+        ЧЕРТЫ
+    </summary>
+
+    <div class="collapsible-content">
+
+        <div class="traits-list">
+
+            {{range $i, $focus := .Sheet.Foci}}
+
+                <div class="trait-card">
+
+                    <div class="trait-header">
+
+                        <div class="field">
+
+                            <label>
+                                Название черты
+                            </label>
+
+                            <input
+                                name="focus_name_{{$i}}"
+                                type="text"
+                                value="{{$focus.Name}}"
+                                placeholder="Название"
+                            >
+
+                        </div>
+
+
+                        <div class="field trait-level">
+
+                            <label>
+                                Уровень
+                            </label>
+
+                            <input
+                                name="focus_level_{{$i}}"
+                                type="text"
+                                value="{{$focus.Level}}"
+                                placeholder="Ур."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Описание
+                        </label>
+
+                        <textarea
+                            name="focus_description_{{$i}}"
+                            rows="4"
+                            placeholder="Что делает эта черта?"
+                        >{{$focus.Description}}</textarea>
+
+                    </div>
+
+                </div>
+
+            {{end}}
+
+        </div>
+
+    </div>
+
+</details>
+
+
+
+        <!-- =========================================
+             ПРЕДМЕТЫ ПОД РУКОЙ
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+<details class="sheet-section collapsible inventory-section">
+
+    <summary>
+        Подготовленные предметы
+    </summary>
+
+    <div class="collapsible-content">
+
+        <div class="inventory-toolbar">
+
+            <span class="inventory-hint">
+                Нажми слева, чтобы затемнить недоступную ячейку
+            </span>
+
+            <label class="inventory-max">
+                <span>Макс. (СИЛА/2 с окр. в меньшую сторону)</span>
+
+                <input
+                    name="readied_max_load"
+                    type="text"
+                    value="{{.Sheet.ReadiedMaxLoad}}"
+                >
+            </label>
+
+        </div>
+
+
+        <div class="inventory-table">
+
+            <div class="inventory-table-header">
+                <span></span>
+                <span>Предмет</span>
+                <span>Вес</span>
+            </div>
+
+
+            {{range $i, $item := .Sheet.ReadiedItems}}
+
+                <div class="inventory-row">
+
+                    <label
+                        class="slot-toggle-label"
+                        title="Доступность ячейки"
+                    >
+                        <input
+                            class="slot-toggle"
+                            name="item_disabled_{{$i}}"
+                            type="checkbox"
+                            value="1"
+                            {{if $item.Disabled}}checked{{end}}
+                        >
+
+                        <span class="slot-toggle-icon"></span>
+                    </label>
+
+
+                    <input
+                        class="inventory-item-name"
+                        name="item_name_{{$i}}"
+                        type="text"
+                        value="{{$item.Name}}"
+                        placeholder="Предмет"
+                    >
+
+
+                    <input
+                        class="inventory-item-weight"
+                        name="item_encumbrance_{{$i}}"
+                        type="text"
+                        value="{{$item.Encumbrance}}"
+                    >
+
+                </div>
+
+            {{end}}
+
+        </div>
+
+    </div>
+
+</details>
+
+
+
+        <!-- =========================================
+             РЮКЗАК / STOWED ITEMS
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+<details class="sheet-section collapsible inventory-section">
+
+    <summary>
+        Рюкзак
+    </summary>
+
+    <div class="collapsible-content">
+
+        <div class="inventory-toolbar">
+
+            <span class="inventory-hint">
+                Нажми слева, чтобы затемнить недоступную ячейку
+            </span>
+
+            <label class="inventory-max">
+                <span>Макс. (значение СИЛА)</span>
+
+                <input
+                    name="stowed_max_load"
+                    type="text"
+                    value="{{.Sheet.StowedMaxLoad}}"
+                >
+            </label>
+
+        </div>
+
+
+        <div class="inventory-table">
+
+            <div class="inventory-table-header">
+                <span></span>
+                <span>Предмет</span>
+                <span>Вес</span>
+            </div>
+
+
+            {{range $i, $item := .Sheet.StowedItems}}
+
+                <div class="inventory-row">
+
+                    <label
+                        class="slot-toggle-label"
+                        title="Доступность ячейки"
+                    >
+                        <input
+                            class="slot-toggle"
+                            name="stowed_item_disabled_{{$i}}"
+                            type="checkbox"
+                            value="1"
+                            {{if $item.Disabled}}checked{{end}}
+                        >
+
+                        <span class="slot-toggle-icon"></span>
+                    </label>
+
+
+                    <input
+                        class="inventory-item-name"
+                        name="stowed_item_name_{{$i}}"
+                        type="text"
+                        value="{{$item.Name}}"
+                        placeholder="Предмет"
+                    >
+
+
+                    <input
+                        class="inventory-item-weight"
+                        name="stowed_item_encumbrance_{{$i}}"
+                        type="text"
+                        value="{{$item.Encumbrance}}"
+                    >
+
+                </div>
+
+            {{end}}
+
+        </div>
+
+    </div>
+
+</details>
+
+
+
+<!-- =========================================
+     ИМУЩЕСТВО
+     СВОРАЧИВАЕМЫЙ БЛОК
+========================================== -->
+
+<details class="sheet-section collapsible">
+
+    <summary>
+        ИМУЩЕСТВО
+    </summary>
+
+
+    <div class="collapsible-content">
+
+
+        <div class="money-grid">
+
+
+            <div class="field">
+
+                <label>
+                    Серебро
+                </label>
+
+                <input
+                    name="property_silver"
+                    type="text"
+                    value="{{.Sheet.Property.Silver}}"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Золото
+                </label>
+
+                <input
+                    name="property_gold"
+                    type="text"
+                    value="{{.Sheet.Property.Gold}}"
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Вещи на хранении
+            </label>
+
+            <textarea
+                name="property_stored"
+                rows="6"
+                placeholder="Имущество, которое персонаж не носит с собой: вещи в лагере, банке, у NPC и т. п."
+            >{{.Sheet.Property.StoredPossessions}}</textarea>
+
+        </div>
+
+
+    </div>
+
+</details>
+
+        <!-- =========================================
+             ПРЕДЫСТОРИЯ И СПОСОБНОСТИ
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+        <details class="sheet-section collapsible">
+
+            <summary>
+                ПРЕДИСТОРИЯ И СПОСОБНОСТИ
+            </summary>
+
+
+            <div class="collapsible-content">
+
+
+                <div class="field">
+
+                    <label>
+                        Подробности предыстории
+                    </label>
+
+                    <textarea
+                        name="background_details"
+                        rows="6"
+                    >{{.Sheet.BackgroundDetails}}</textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Способности класса
+                    </label>
+
+                    <textarea
+                        name="benefits"
+                        rows="6"
+                    >{{.Sheet.Benefits}}</textarea>
+
+                </div>
+
+
+            </div>
+
+        </details>
+
+
+
+        <!-- =========================================
+             О ПЕРСОНАЖЕ
+             СВОРАЧИВАЕМЫЙ БЛОК
+        ========================================== -->
+
+        <details class="sheet-section collapsible">
+
+            <summary>
+                О персонаже
+            </summary>
+
+
+            <div class="collapsible-content">
+
+
+                <div class="sheet-grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Родина
+                        </label>
+
+                        <input
+                            name="homeland"
+                            type="text"
+                            value="{{.Sheet.Homeland}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Род занятий
+                        </label>
+
+                        <input
+                            name="occupation"
+                            type="text"
+                            value="{{.Sheet.Occupation}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field field-wide">
+
+                        <label>
+                            Раса / Вид
+                        </label>
+
+                        <input
+                            name="race_species"
+                            type="text"
+                            value="{{.Sheet.RaceSpecies}}"
+                        >
+
+                    </div>
+
+
+                    <div class="field field-wide">
+
+                        <label>
+                            Цель
+                        </label>
+
+                        <input
+                            name="goal"
+                            type="text"
+                            value="{{.Sheet.Goal}}"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Описание
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="7"
+                    >{{.Sheet.Description}}</textarea>
+
+                </div>
+
+
+
+                <div class="field">
+
+                    <label>
+                        Заметки
+                    </label>
+
+                    <textarea
+                        name="sketch_or_sigil"
+                        rows="6"
+                    >{{.Sheet.SketchOrSigil}}</textarea>
+
+                </div>
+
+
+            </div>
+
+        </details>
+
+
+
+        <!-- =========================================
+             СОХРАНЕНИЕ
+        ========================================== -->
+
+        <button
+            class="save-character-button"
+            type="submit"
+        >
+            Сохранить персонажа
+        </button>
+
+
+    </form>
+
+</main>
 
 </body>
+
 </html>

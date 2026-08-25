@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -818,28 +818,21 @@ func (app *application) characterGet(
 		return
 	}
 
-	var sheet character.Sheet
+	sheet, err := character.DecodeSheet(c.Data)
 
-	if c.Data != "" && c.Data != "{}" {
-		err := json.Unmarshal(
-			[]byte(c.Data),
-			&sheet,
+	if err != nil {
+		log.Printf(
+			"decode character data error: %v",
+			err,
 		)
 
-		if err != nil {
-			log.Printf(
-				"decode character data error: %v",
-				err,
-			)
+		http.Error(
+			w,
+			"Internal Server Error",
+			http.StatusInternalServerError,
+		)
 
-			http.Error(
-				w,
-				"Internal Server Error",
-				http.StatusInternalServerError,
-			)
-
-			return
-		}
+		return
 	}
 
 	data := characterPageData{
@@ -884,8 +877,6 @@ func (app *application) characterPost(
 		return
 	}
 
-	// Сначала убеждаемся, что персонаж
-	// действительно принадлежит пользователю.
 	c, err := app.characters.GetByIDForUser(
 		characterID,
 		u.ID,
@@ -927,8 +918,11 @@ func (app *application) characterPost(
 	)
 
 	if name == "" {
+		sheet, _ := character.DecodeSheet(c.Data)
+
 		data := characterPageData{
 			Character: c,
+			Sheet:     sheet,
 			Error:     "Укажи имя персонажа.",
 		}
 
@@ -941,13 +935,14 @@ func (app *application) characterPost(
 		return
 	}
 
-	level, err := strconv.Atoi(
-		levelString,
-	)
+	level, err := strconv.Atoi(levelString)
 
 	if err != nil {
+		sheet, _ := character.DecodeSheet(c.Data)
+
 		data := characterPageData{
 			Character: c,
+			Sheet:     sheet,
 			Error:     "Уровень должен быть числом.",
 		}
 
@@ -961,24 +956,93 @@ func (app *application) characterPost(
 	}
 
 	sheet := character.Sheet{
+		Player: strings.TrimSpace(
+			r.PostForm.Get("player"),
+		),
+
+		Homeland: strings.TrimSpace(
+			r.PostForm.Get("homeland"),
+		),
+
+		Occupation: strings.TrimSpace(
+			r.PostForm.Get("occupation"),
+		),
+
+		RaceSpecies: strings.TrimSpace(
+			r.PostForm.Get("race_species"),
+		),
+
+		Goal: strings.TrimSpace(
+			r.PostForm.Get("goal"),
+		),
+
+		Description: strings.TrimSpace(
+			r.PostForm.Get("description"),
+		),
+
+		Background: strings.TrimSpace(
+			r.PostForm.Get("background"),
+		),
+
+		BackgroundDetails: strings.TrimSpace(
+			r.PostForm.Get("background_details"),
+		),
+
+		Benefits: strings.TrimSpace(
+			r.PostForm.Get("benefits"),
+		),
+
+		XP: strings.TrimSpace(
+			r.PostForm.Get("xp"),
+		),
+
 		Attributes: character.Attributes{
 			Strength: strings.TrimSpace(
 				r.PostForm.Get("strength"),
 			),
+
+			StrengthMod: strings.TrimSpace(
+				r.PostForm.Get("strength_mod"),
+			),
+
 			Dexterity: strings.TrimSpace(
 				r.PostForm.Get("dexterity"),
 			),
+
+			DexterityMod: strings.TrimSpace(
+				r.PostForm.Get("dexterity_mod"),
+			),
+
 			Constitution: strings.TrimSpace(
 				r.PostForm.Get("constitution"),
 			),
+
+			ConstitutionMod: strings.TrimSpace(
+				r.PostForm.Get("constitution_mod"),
+			),
+
 			Intelligence: strings.TrimSpace(
 				r.PostForm.Get("intelligence"),
 			),
+
+			IntelligenceMod: strings.TrimSpace(
+				r.PostForm.Get("intelligence_mod"),
+			),
+
 			Wisdom: strings.TrimSpace(
 				r.PostForm.Get("wisdom"),
 			),
+
+			WisdomMod: strings.TrimSpace(
+				r.PostForm.Get("wisdom_mod"),
+			),
+
 			Charisma: strings.TrimSpace(
 				r.PostForm.Get("charisma"),
+			),
+
+			CharismaMod: strings.TrimSpace(
+				r.PostForm.Get("charisma_mod"),
 			),
 		},
 
@@ -986,15 +1050,295 @@ func (app *application) characterPost(
 			Current: strings.TrimSpace(
 				r.PostForm.Get("hp_current"),
 			),
+
 			Max: strings.TrimSpace(
 				r.PostForm.Get("hp_max"),
 			),
 		},
+
+		SystemStrain: character.SystemStrain{
+			Current: strings.TrimSpace(
+				r.PostForm.Get("system_strain_current"),
+			),
+
+			Max: strings.TrimSpace(
+				r.PostForm.Get("system_strain_max"),
+			),
+		},
+
+		Saves: character.Saves{
+			Physical: strings.TrimSpace(
+				r.PostForm.Get("save_physical"),
+			),
+
+			Evasion: strings.TrimSpace(
+				r.PostForm.Get("save_evasion"),
+			),
+
+			Mental: strings.TrimSpace(
+				r.PostForm.Get("save_mental"),
+			),
+
+			Luck: strings.TrimSpace(
+				r.PostForm.Get("save_luck"),
+			),
+		},
+
+		Combat: character.Combat{
+			BaseAttackBonus: strings.TrimSpace(
+				r.PostForm.Get("base_attack_bonus"),
+			),
+
+			MeleeAttack: strings.TrimSpace(
+				r.PostForm.Get("melee_attack"),
+			),
+
+			RangedAttack: strings.TrimSpace(
+				r.PostForm.Get("ranged_attack"),
+			),
+
+			Initiative: strings.TrimSpace(
+				r.PostForm.Get("initiative"),
+			),
+		},
+
+		Armor: character.Armor{
+			DexMod: strings.TrimSpace(
+				r.PostForm.Get("armor_dex_mod"),
+			),
+
+			WornArmor: strings.TrimSpace(
+				r.PostForm.Get("worn_armor"),
+			),
+
+			AC: strings.TrimSpace(
+				r.PostForm.Get("armor_class"),
+			),
+
+			Special: strings.TrimSpace(
+				r.PostForm.Get("armor_special"),
+			),
+		},
+
+		Skills: character.Skills{
+			Administer: r.PostForm.Get("skill_administer"),
+			Connect:    r.PostForm.Get("skill_connect"),
+			Convince:   r.PostForm.Get("skill_convince"),
+			Craft:      r.PostForm.Get("skill_craft"),
+			Exert:      r.PostForm.Get("skill_exert"),
+			Heal:       r.PostForm.Get("skill_heal"),
+			Know:       r.PostForm.Get("skill_know"),
+			Lead:       r.PostForm.Get("skill_lead"),
+			Magic:      r.PostForm.Get("skill_magic"),
+			Notice:     r.PostForm.Get("skill_notice"),
+			Perform:    r.PostForm.Get("skill_perform"),
+			Pray:       r.PostForm.Get("skill_pray"),
+			Punch:      r.PostForm.Get("skill_punch"),
+			Ride:       r.PostForm.Get("skill_ride"),
+			Sail:       r.PostForm.Get("skill_sail"),
+			Shoot:      r.PostForm.Get("skill_shoot"),
+			Sneak:      r.PostForm.Get("skill_sneak"),
+			Stab:       r.PostForm.Get("skill_stab"),
+			Survive:    r.PostForm.Get("skill_survive"),
+			Trade:      r.PostForm.Get("skill_trade"),
+
+			WorkName: strings.TrimSpace(
+				r.PostForm.Get("skill_work_name"),
+			),
+
+			Work: r.PostForm.Get("skill_work"),
+		},
+
+		SkillPoints: strings.TrimSpace(
+			r.PostForm.Get("skill_points"),
+		),
+
+		ExpertPoints: strings.TrimSpace(
+			r.PostForm.Get("expert_points"),
+		),
+
+		ReadiedMaxLoad: strings.TrimSpace(
+			r.PostForm.Get("readied_max_load"),
+		),
+
+		StowedMaxLoad: strings.TrimSpace(
+			r.PostForm.Get("stowed_max_load"),
+		),
+
+		Ammunition: strings.TrimSpace(
+			r.PostForm.Get("ammunition"),
+		),
+
+		SketchOrSigil: strings.TrimSpace(
+			r.PostForm.Get("sketch_or_sigil"),
+		),
+
+		Property: character.Property{
+			Silver: strings.TrimSpace(
+				r.PostForm.Get("property_silver"),
+			),
+
+			Gold: strings.TrimSpace(
+				r.PostForm.Get("property_gold"),
+			),
+
+			StoredPossessions: strings.TrimSpace(
+				r.PostForm.Get("property_stored"),
+			),
+		},
 	}
 
-	jsonData, err := json.Marshal(
-		sheet,
-	)
+	for i := 0; i < character.DefaultFociRows; i++ {
+		sheet.Foci = append(
+			sheet.Foci,
+			character.Focus{
+				Name: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"focus_name_%d",
+							i,
+						),
+					),
+				),
+
+				Level: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"focus_level_%d",
+							i,
+						),
+					),
+				),
+
+				Description: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"focus_description_%d",
+							i,
+						),
+					),
+				),
+			},
+		)
+	}
+
+	for i := 0; i < character.DefaultWeaponRows; i++ {
+		sheet.Weapons = append(
+			sheet.Weapons,
+			character.Weapon{
+				Name: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"weapon_name_%d",
+							i,
+						),
+					),
+				),
+
+				HitBonus: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"weapon_hit_%d",
+							i,
+						),
+					),
+				),
+
+				Damage: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"weapon_damage_%d",
+							i,
+						),
+					),
+				),
+
+				Range: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"weapon_range_%d",
+							i,
+						),
+					),
+				),
+
+				SpecialShock: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"weapon_special_%d",
+							i,
+						),
+					),
+				),
+			},
+		)
+	}
+
+	for i := 0; i < character.DefaultReadiedItemRows; i++ {
+		sheet.ReadiedItems = append(
+			sheet.ReadiedItems,
+			character.ReadiedItem{
+				Name: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"item_name_%d",
+							i,
+						),
+					),
+				),
+
+				Encumbrance: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"item_encumbrance_%d",
+							i,
+						),
+					),
+				),
+
+				Disabled: r.PostForm.Get(
+					fmt.Sprintf(
+						"item_disabled_%d",
+						i,
+					),
+				) == "1",
+			},
+		)
+	}
+
+	for i := 0; i < character.DefaultStowedItemRows; i++ {
+		sheet.StowedItems = append(
+			sheet.StowedItems,
+			character.StowedItem{
+				Name: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"stowed_item_name_%d",
+							i,
+						),
+					),
+				),
+
+				Encumbrance: strings.TrimSpace(
+					r.PostForm.Get(
+						fmt.Sprintf(
+							"stowed_item_encumbrance_%d",
+							i,
+						),
+					),
+				),
+
+				Disabled: r.PostForm.Get(
+					fmt.Sprintf(
+						"stowed_item_disabled_%d",
+						i,
+					),
+				) == "1",
+			},
+		)
+	}
+
+	jsonData, err := sheet.Encode()
 
 	if err != nil {
 		log.Printf(
@@ -1017,7 +1361,7 @@ func (app *application) characterPost(
 		name,
 		level,
 		class,
-		string(jsonData),
+		jsonData,
 	)
 
 	if errors.Is(
