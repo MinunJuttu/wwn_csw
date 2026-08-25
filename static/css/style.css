@@ -50,3 +50,130 @@ h1 {
 .card h2 {
     margin-top: 0;
 }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form label {
+    margin-top: 8px;
+
+    font-weight: 600;
+}
+
+.form input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    font: inherit;
+
+    border: 1px solid #bbb;
+    border-radius: 8px;
+}
+
+.form input:focus {
+    outline: 2px solid #333;
+    outline-offset: 1px;
+}
+
+.field-hint {
+    margin: -4px 0 8px;
+
+    font-size: 13px;
+
+    color: #777;
+}
+
+button,
+.button {
+    display: inline-block;
+
+    margin-top: 12px;
+    padding: 12px 18px;
+
+    font: inherit;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+
+    color: white;
+    background: #222;
+
+    border: 0;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+button:hover,
+.button:hover {
+    background: #444;
+}
+
+.back-link {
+    display: inline-block;
+
+    margin-bottom: 24px;
+
+    color: #444;
+    text-decoration: none;
+}
+
+.message {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+
+    border-radius: 8px;
+}
+
+.message.error {
+    background: #ffe8e8;
+    border: 1px solid #e0a0a0;
+}
+
+.message.success {
+    background: #e8f7e8;
+    border: 1px solid #a0cfa0;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.secondary-link {
+    color: #222;
+    background: #ddd;
+}
+
+.secondary-link:hover {
+    background: #ccc;
+}
+
+.secondary-button {
+    margin: 0;
+
+    color: #222;
+    background: #ddd;
+}
+
+.secondary-button:hover {
+    background: #ccc;
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+.page-header .subtitle {
+    margin-bottom: 0;
+}

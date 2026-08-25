@@ -45,8 +45,6 @@ go.work.sum
 
 # Compiled binaries
 /bin/
-wwn_csw
-server
 
 # macOS
 .DS_Store

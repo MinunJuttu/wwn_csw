@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Персонажи — WWN Character Sheet</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Персонажи</h1>
+
+                <p class="subtitle">
+                    Пользователь: {{.Username}}
+                </p>
+            </div>
+
+            <form
+                method="post"
+                action="/logout"
+            >
+                <button
+                    class="secondary-button"
+                    type="submit"
+                >
+                    Выйти
+                </button>
+            </form>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Пока пусто</h2>
+
+            <p>
+                Здесь скоро появятся твои персонажи.
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

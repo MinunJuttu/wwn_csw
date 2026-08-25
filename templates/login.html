@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Вход — WWN Character Sheet</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a class="back-link" href="/">
+            ← На главную
+        </a>
+
+        <h1>Вход</h1>
+
+        <p class="subtitle">
+            Войди в свой аккаунт.
+        </p>
+
+        {{if .Registered}}
+
+            <div class="message success">
+                Пользователь создан. Теперь можно войти.
+            </div>
+
+        {{end}}
+
+        {{if .Error}}
+
+            <div class="message error">
+                {{.Error}}
+            </div>
+
+        {{end}}
+
+        <form
+            class="card form"
+            method="post"
+            action="/login"
+        >
+
+            <label for="username">
+                Логин
+            </label>
+
+            <input
+                id="username"
+                name="username"
+                type="text"
+                value="{{.Username}}"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">
+                Пароль
+            </label>
+
+            <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">
+                Войти
+            </button>
+
+        </form>
+
+        <p>
+            Нет аккаунта?
+            <a href="/register">
+                Зарегистрироваться
+            </a>
+        </p>
+
+    </main>
+
+</body>
+</html>

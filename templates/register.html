@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Регистрация — WWN Character Sheet</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a class="back-link" href="/">
+            ← На главную
+        </a>
+
+        <h1>Регистрация</h1>
+
+        <p class="subtitle">
+            Создай аккаунт для хранения персонажей.
+        </p>
+
+        {{if .Error}}
+
+            <div class="message error">
+                {{.Error}}
+            </div>
+
+        {{end}}
+
+        <form
+            class="card form"
+            method="post"
+            action="/register"
+        >
+
+            <label for="username">
+                Логин
+            </label>
+
+            <input
+                id="username"
+                name="username"
+                type="text"
+                value="{{.Username}}"
+                minlength="3"
+                maxlength="32"
+                autocomplete="username"
+                required
+            >
+
+            <p class="field-hint">
+                3–32 символа: латинские буквы, цифры, _ и -
+            </p>
+
+
+            <label for="password">
+                Пароль
+            </label>
+
+            <input
+                id="password"
+                name="password"
+                type="password"
+                minlength="4"
+                autocomplete="new-password"
+                required
+            >
+
+            <p class="field-hint">
+                Минимум 4 символа.
+            </p>
+
+
+            <button type="submit">
+                Зарегистрироваться
+            </button>
+
+        </form>
+
+        <p>
+    Уже есть аккаунт?
+    <a href="/login">
+        Войти
+    </a>
+</p>
+
+    </main>
+
+</body>
+</html>
