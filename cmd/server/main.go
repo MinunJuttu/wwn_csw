@@ -10,9 +10,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/MinunJuttu/wwn_csw/internal/auth"
 	"github.com/MinunJuttu/wwn_csw/internal/character"
+	"github.com/MinunJuttu/wwn_csw/internal/config"
 	"github.com/MinunJuttu/wwn_csw/internal/database"
 	"github.com/MinunJuttu/wwn_csw/internal/session"
 	"github.com/MinunJuttu/wwn_csw/internal/user"
@@ -25,6 +27,7 @@ type contextKey string
 const userContextKey contextKey = "user"
 
 type application struct {
+	config     config.Config
 	users      *user.Store
 	sessions   *session.Store
 	characters *character.Store
@@ -63,6 +66,20 @@ var usernamePattern = regexp.MustCompile(
 )
 
 func main() {
+	log.SetFlags(
+		log.Ldate |
+			log.Ltime |
+			log.LUTC,
+	)
+
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf(
+			"configuration error: %v",
+			err,
+		)
+	}
+
 	db, err := database.Open("./data/wwn.db")
 	if err != nil {
 		log.Fatalf(
@@ -77,6 +94,7 @@ func main() {
 	)
 
 	app := &application{
+		config:     cfg,
 		users:      user.NewStore(db),
 		sessions:   session.NewStore(db),
 		characters: character.NewStore(db),
@@ -137,18 +155,22 @@ func main() {
 		),
 	)
 
-	address := ":8080"
+	server := &http.Server{
+		Addr:              cfg.ServerAddress,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 
 	log.Printf(
-		"Server started at http://localhost%s",
-		address,
+		"Server starting: environment=%s address=%s",
+		cfg.Environment,
+		cfg.ServerAddress,
 	)
 
-	err = http.ListenAndServe(
-		address,
-		mux,
-	)
-
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -463,7 +485,7 @@ func (app *application) loginPost(
 			Path:     "/",
 			HttpOnly: true,
 			SameSite: http.SameSiteLaxMode,
-			Secure:   false,
+			Secure:   app.config.SecureCookies,
 			Expires:  expiresAt,
 			MaxAge: int(
 				session.Lifetime.Seconds(),
@@ -513,7 +535,7 @@ func (app *application) logoutHandler(
 		}
 	}
 
-	clearSessionCookie(w)
+	app.clearSessionCookie(w)
 
 	http.Redirect(
 		w,
@@ -1550,7 +1572,7 @@ func (app *application) requireAuth(
 			)
 
 		if err != nil {
-			clearSessionCookie(w)
+			app.clearSessionCookie(w)
 
 			http.Redirect(
 				w,
@@ -1567,7 +1589,7 @@ func (app *application) requireAuth(
 		)
 
 		if err != nil {
-			clearSessionCookie(w)
+			app.clearSessionCookie(w)
 
 			http.Redirect(
 				w,
@@ -1601,7 +1623,7 @@ func currentUser(
 	return u, ok
 }
 
-func clearSessionCookie(
+func (app *application) clearSessionCookie(
 	w http.ResponseWriter,
 ) {
 	http.SetCookie(
@@ -1612,7 +1634,7 @@ func clearSessionCookie(
 			Path:     "/",
 			HttpOnly: true,
 			SameSite: http.SameSiteLaxMode,
-			Secure:   false,
+			Secure:   app.config.SecureCookies,
 			MaxAge:   -1,
 		},
 	)
