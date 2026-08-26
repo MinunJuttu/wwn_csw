@@ -1382,54 +1382,69 @@ func (app *application) characterPost(
 		)
 	}
 
-	for i := 0; i < character.DefaultWeaponRows; i++ {
+	for i := 0; i < character.MaxWeaponRows; i++ {
+		name := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_name_%d", i),
+			),
+		)
+
+		attribute := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_attribute_%d", i),
+			),
+		)
+
+		encumbrance := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_encumbrance_%d", i),
+			),
+		)
+
+		hitBonus := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_hit_%d", i),
+			),
+		)
+
+		damage := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_damage_%d", i),
+			),
+		)
+
+		weaponRange := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_range_%d", i),
+			),
+		)
+
+		specialShock := strings.TrimSpace(
+			r.PostForm.Get(
+				fmt.Sprintf("weapon_special_%d", i),
+			),
+		)
+
+		if name == "" &&
+			attribute == "" &&
+			encumbrance == "" &&
+			hitBonus == "" &&
+			damage == "" &&
+			weaponRange == "" &&
+			specialShock == "" {
+			continue
+		}
+
 		sheet.Weapons = append(
 			sheet.Weapons,
 			character.Weapon{
-				Name: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"weapon_name_%d",
-							i,
-						),
-					),
-				),
-
-				HitBonus: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"weapon_hit_%d",
-							i,
-						),
-					),
-				),
-
-				Damage: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"weapon_damage_%d",
-							i,
-						),
-					),
-				),
-
-				Range: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"weapon_range_%d",
-							i,
-						),
-					),
-				),
-
-				SpecialShock: strings.TrimSpace(
-					r.PostForm.Get(
-						fmt.Sprintf(
-							"weapon_special_%d",
-							i,
-						),
-					),
-				),
+				Name:         name,
+				Attribute:    attribute,
+				Encumbrance:  encumbrance,
+				HitBonus:     hitBonus,
+				Damage:       damage,
+				Range:        weaponRange,
+				SpecialShock: specialShock,
 			},
 		)
 	}

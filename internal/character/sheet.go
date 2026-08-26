@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	DefaultFociRows = 1
-	MaxFociRows     = 10
-
-	DefaultWeaponRows      = 5
+	DefaultFociRows        = 1
+	MaxFociRows            = 10
+	DefaultWeaponRows      = 1
+	MaxWeaponRows          = 20
 	DefaultReadiedItemRows = 10
 	DefaultStowedItemRows  = 20
 
@@ -19,13 +19,7 @@ const (
 	MaxMagicTraditionRows = 5
 )
 
-// Sheet содержит все данные листа,
-// которые хранятся внутри JSON.
-//
-// Name, Level и Class сюда не входят:
-// они уже лежат отдельными колонками characters.
 type Sheet struct {
-	// Основная информация
 	Player      string `json:"player"`
 	Homeland    string `json:"homeland"`
 	Occupation  string `json:"occupation"`
@@ -33,77 +27,53 @@ type Sheet struct {
 	Goal        string `json:"goal"`
 	Description string `json:"description"`
 
-	// Background и класс
 	Background        string `json:"background"`
 	BackgroundDetails string `json:"background_details"`
 	Benefits          string `json:"benefits"`
 
-	// Развитие
 	XP string `json:"xp"`
 
-	// Основные характеристики
-	Attributes Attributes `json:"attributes"`
-
-	// Ресурсы
+	Attributes   Attributes   `json:"attributes"`
 	HP           HitPoints    `json:"hp"`
 	SystemStrain SystemStrain `json:"system_strain"`
+	Saves        Saves        `json:"saves"`
+	Combat       Combat       `json:"combat"`
+	Armor        Armor        `json:"armor"`
 
-	// Спасброски
-	Saves Saves `json:"saves"`
-
-	// Боевые значения
-	Combat Combat `json:"combat"`
-	Armor  Armor  `json:"armor"`
-
-	// Навыки
 	Skills       Skills `json:"skills"`
 	SkillPoints  string `json:"skill_points"`
 	ExpertPoints string `json:"expert_points"`
 
-	// Переменные списки
-	Foci         []Focus       `json:"foci"`
-	Weapons      []Weapon      `json:"weapons"`
-	ReadiedItems []ReadiedItem `json:"readied_items"`
-	StowedItems  []StowedItem  `json:"stowed_items"`
+	Foci            []Focus          `json:"foci"`
+	Weapons         []Weapon         `json:"weapons"`
+	Spells          []Spell          `json:"spells"`
+	MagicTraditions []MagicTradition `json:"magic_traditions"`
+	MagicArts       []MagicArt       `json:"magic_arts"`
+	ReadiedItems    []ReadiedItem    `json:"readied_items"`
+	StowedItems     []StowedItem     `json:"stowed_items"`
 
-	// Инвентарь
 	ReadiedMaxLoad string `json:"readied_max_load"`
 	StowedMaxLoad  string `json:"stowed_max_load"`
 	Ammunition     string `json:"ammunition"`
 
-	// Пока это текстовое поле.
-	// Позже при желании сюда можно добавить изображение.
-	Property      Property `json:"property"`
-	SketchOrSigil string   `json:"sketch_or_sigil"`
+	Property Property `json:"property"`
 
-	Spells          []Spell          `json:"spells"`
-	MagicTraditions []MagicTradition `json:"magic_traditions"`
-	MagicArts       []MagicArt       `json:"magic_arts"`
+	SketchOrSigil string `json:"sketch_or_sigil"`
 }
 
-// Attributes.
-//
-// Старые JSON-имена strength, dexterity и т. д.
-// намеренно сохраняем, чтобы уже созданные персонажи
-// продолжали нормально загружаться.
 type Attributes struct {
-	Strength    string `json:"strength"`
-	StrengthMod string `json:"strength_mod"`
-
-	Dexterity    string `json:"dexterity"`
-	DexterityMod string `json:"dexterity_mod"`
-
+	Strength        string `json:"strength"`
+	StrengthMod     string `json:"strength_mod"`
+	Dexterity       string `json:"dexterity"`
+	DexterityMod    string `json:"dexterity_mod"`
 	Constitution    string `json:"constitution"`
 	ConstitutionMod string `json:"constitution_mod"`
-
 	Intelligence    string `json:"intelligence"`
 	IntelligenceMod string `json:"intelligence_mod"`
-
-	Wisdom    string `json:"wisdom"`
-	WisdomMod string `json:"wisdom_mod"`
-
-	Charisma    string `json:"charisma"`
-	CharismaMod string `json:"charisma_mod"`
+	Wisdom          string `json:"wisdom"`
+	WisdomMod       string `json:"wisdom_mod"`
+	Charisma        string `json:"charisma"`
+	CharismaMod     string `json:"charisma_mod"`
 }
 
 type HitPoints struct {
@@ -137,7 +107,6 @@ type Armor struct {
 	Special   string `json:"special"`
 }
 
-// Skills содержит стандартный список навыков WWN.
 type Skills struct {
 	Administer string `json:"administer"`
 	Connect    string `json:"connect"`
@@ -159,11 +128,8 @@ type Skills struct {
 	Stab       string `json:"stab"`
 	Survive    string `json:"survive"`
 	Trade      string `json:"trade"`
-
-	// У Work может быть специализация,
-	// поэтому отдельно храним её название.
-	WorkName string `json:"work_name"`
-	Work     string `json:"work"`
+	WorkName   string `json:"work_name"`
+	Work       string `json:"work"`
 }
 
 type Focus struct {
@@ -174,28 +140,12 @@ type Focus struct {
 
 type Weapon struct {
 	Name         string `json:"name"`
+	Attribute    string `json:"attribute"`
+	Encumbrance  string `json:"encumbrance"`
 	HitBonus     string `json:"hit_bonus"`
 	Damage       string `json:"damage"`
 	Range        string `json:"range"`
 	SpecialShock string `json:"special_shock"`
-}
-
-type ReadiedItem struct {
-	Name        string `json:"name"`
-	Encumbrance string `json:"encumbrance"`
-	Disabled    bool   `json:"disabled"`
-}
-
-type StowedItem struct {
-	Name        string `json:"name"`
-	Encumbrance string `json:"encumbrance"`
-	Disabled    bool   `json:"disabled"`
-}
-
-type Property struct {
-	Silver            string `json:"silver"`
-	Gold              string `json:"gold"`
-	StoredPossessions string `json:"stored_possessions"`
 }
 
 type Spell struct {
@@ -218,34 +168,41 @@ type MagicArt struct {
 	Description   string `json:"description"`
 }
 
-// EnsureRows гарантирует, что новый или старый персонаж
-// получает несколько пустых строк для редактирования.
-//
-// Позже JavaScript позволит добавлять и удалять строки
-// без фиксированного ограничения.
+type ReadiedItem struct {
+	Name        string `json:"name"`
+	Encumbrance string `json:"encumbrance"`
+	Disabled    bool   `json:"disabled"`
+}
+
+type StowedItem struct {
+	Name        string `json:"name"`
+	Encumbrance string `json:"encumbrance"`
+	Disabled    bool   `json:"disabled"`
+}
+
+type Property struct {
+	Silver            string `json:"silver"`
+	Gold              string `json:"gold"`
+	StoredPossessions string `json:"stored_possessions"`
+}
+
 func (s *Sheet) EnsureRows() {
 	s.Foci = compactFoci(s.Foci)
-
-	if len(s.Foci) == 0 {
+	for len(s.Foci) < DefaultFociRows {
 		s.Foci = append(s.Foci, Focus{})
 	}
 
+	s.Weapons = compactWeapons(s.Weapons)
 	for len(s.Weapons) < DefaultWeaponRows {
 		s.Weapons = append(s.Weapons, Weapon{})
 	}
 
 	for len(s.ReadiedItems) < DefaultReadiedItemRows {
-		s.ReadiedItems = append(
-			s.ReadiedItems,
-			ReadiedItem{},
-		)
+		s.ReadiedItems = append(s.ReadiedItems, ReadiedItem{})
 	}
 
 	for len(s.StowedItems) < DefaultStowedItemRows {
-		s.StowedItems = append(
-			s.StowedItems,
-			StowedItem{},
-		)
+		s.StowedItems = append(s.StowedItems, StowedItem{})
 	}
 
 	if len(s.Spells) == 0 {
@@ -253,17 +210,11 @@ func (s *Sheet) EnsureRows() {
 	}
 
 	if len(s.MagicTraditions) == 0 {
-		s.MagicTraditions = append(
-			s.MagicTraditions,
-			MagicTradition{},
-		)
+		s.MagicTraditions = append(s.MagicTraditions, MagicTradition{})
 	}
 
 	if len(s.MagicArts) == 0 {
-		s.MagicArts = append(
-			s.MagicArts,
-			MagicArt{},
-		)
+		s.MagicArts = append(s.MagicArts, MagicArt{})
 	}
 }
 
@@ -283,43 +234,47 @@ func compactFoci(foci []Focus) []Focus {
 	return result
 }
 
-// DecodeSheet превращает JSON из SQLite в Sheet.
+func compactWeapons(weapons []Weapon) []Weapon {
+	result := make([]Weapon, 0, len(weapons))
+
+	for _, weapon := range weapons {
+		if strings.TrimSpace(weapon.Name) == "" &&
+			strings.TrimSpace(weapon.Attribute) == "" &&
+			strings.TrimSpace(weapon.Encumbrance) == "" &&
+			strings.TrimSpace(weapon.HitBonus) == "" &&
+			strings.TrimSpace(weapon.Damage) == "" &&
+			strings.TrimSpace(weapon.Range) == "" &&
+			strings.TrimSpace(weapon.SpecialShock) == "" {
+			continue
+		}
+
+		result = append(result, weapon)
+	}
+
+	return result
+}
+
 func DecodeSheet(data string) (Sheet, error) {
 	var sheet Sheet
 
 	data = strings.TrimSpace(data)
-
 	if data == "" || data == "{}" {
 		sheet.EnsureRows()
 		return sheet, nil
 	}
 
-	err := json.Unmarshal(
-		[]byte(data),
-		&sheet,
-	)
-
-	if err != nil {
-		return Sheet{}, fmt.Errorf(
-			"decode character sheet: %w",
-			err,
-		)
+	if err := json.Unmarshal([]byte(data), &sheet); err != nil {
+		return Sheet{}, fmt.Errorf("decode character sheet: %w", err)
 	}
 
 	sheet.EnsureRows()
-
 	return sheet, nil
 }
 
-// Encode превращает Sheet обратно в JSON.
 func (s Sheet) Encode() (string, error) {
 	data, err := json.Marshal(s)
-
 	if err != nil {
-		return "", fmt.Errorf(
-			"encode character sheet: %w",
-			err,
-		)
+		return "", fmt.Errorf("encode character sheet: %w", err)
 	}
 
 	return string(data), nil

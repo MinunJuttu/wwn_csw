@@ -1307,3 +1307,441 @@ input[type="text"] {
     background: #a52a2a;
     border-color: #a52a2a;
 }
+
+/* =========================================================
+   ОРУЖИЕ — ДОБАВИТЬ В КОНЕЦ static/css/style.css
+========================================================= */
+
+.weapon-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.weapon-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.weapon-action-button,
+.weapon-preset-summary {
+    width: auto;
+    margin-top: 0;
+}
+
+.weapon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.weapon-card {
+    padding: 12px;
+
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.weapon-card-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34px;
+    gap: 10px;
+    align-items: end;
+
+    margin-bottom: 10px;
+}
+
+.weapon-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.weapon-special-field {
+    margin-top: 10px;
+}
+
+.weapon-ammunition-field {
+    margin-top: 18px;
+}
+
+/* Кнопка справки */
+
+.weapon-help-button {
+    flex: 0 0 auto;
+
+    width: 34px;
+    height: 34px;
+    padding: 0;
+
+    font: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1;
+
+    color: #555;
+    background: #fff;
+
+    border: 1px solid #bbb;
+    border-radius: 50%;
+
+    cursor: pointer;
+}
+
+.weapon-help-button:hover {
+    background: #f1f1f1;
+    border-color: #888;
+}
+
+/* Выпадающий список стандартного оружия */
+
+.weapon-preset-picker {
+    position: relative;
+}
+
+.weapon-preset-picker > summary {
+    list-style: none;
+}
+
+.weapon-preset-picker > summary::-webkit-details-marker {
+    display: none;
+}
+
+.weapon-preset-summary {
+    display: block;
+    box-sizing: border-box;
+}
+
+.weapon-preset-menu {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 6px);
+    left: 0;
+
+    width: min(320px, 82vw);
+    max-height: 340px;
+    overflow-y: auto;
+
+    padding: 6px;
+
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+}
+
+.weapon-preset-option {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    width: 100%;
+    padding: 9px 10px;
+
+    font: inherit;
+    text-align: left;
+
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.weapon-preset-option:hover {
+    background: #f0f0f0;
+}
+
+.weapon-preset-option strong {
+    font-size: 14px;
+}
+
+.weapon-preset-option span {
+    font-size: 11px;
+    color: #777;
+}
+
+.weapon-preset-empty {
+    padding: 10px;
+    font-size: 13px;
+    color: #777;
+}
+
+/* Модальное окно справки */
+
+.weapon-help-dialog {
+    width: min(680px, calc(100vw - 28px));
+    max-height: min(780px, calc(100vh - 40px));
+    overflow-y: auto;
+
+    padding: 0;
+
+    color: inherit;
+    background: #fff;
+
+    border: 1px solid #bbb;
+    border-radius: 12px;
+}
+
+.weapon-help-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.weapon-help-header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.weapon-help-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.weapon-help-close-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    font: inherit;
+    font-size: 22px;
+    line-height: 1;
+
+    color: #666;
+    background: transparent;
+
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.weapon-help-content {
+    padding: 16px;
+}
+
+.weapon-help-section + .weapon-help-section {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #e3e3e3;
+}
+
+.weapon-help-section h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.weapon-help-text {
+    margin: 0;
+    white-space: pre-line;
+    line-height: 1.5;
+}
+
+.weapon-help-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.weapon-help-tag strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.weapon-help-close-button {
+    width: calc(100% - 32px);
+    margin: 0 16px 16px;
+    padding: 10px 14px;
+
+    font: inherit;
+    font-weight: 600;
+
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .weapon-toolbar {
+        align-items: flex-start;
+    }
+
+    .weapon-actions {
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .weapon-action-button,
+    .weapon-preset-picker,
+    .weapon-preset-summary {
+        width: 100%;
+    }
+
+    .weapon-preset-menu {
+        width: min(300px, 76vw);
+    }
+
+    .weapon-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .weapon-stats-grid label {
+        font-size: 11px;
+    }
+
+    .weapon-card-header {
+        grid-template-columns: minmax(0, 1fr) 30px;
+    }
+}
+/* =========================================================
+   ОРУЖИЕ — ДОБАВИТЬ В САМЫЙ КОНЕЦ static/css/style.css
+
+   Этот блок одновременно:
+   - исправляет размер кнопки «Добавить стандартное»;
+   - добавляет компактное поле «Хар.»;
+   - добавляет компактное поле «Нагрузка».
+========================================================= */
+
+/*
+   Хар. | Нагрузка | Бонус атаки | Урон | Дальность
+*/
+.weapon-stats-grid {
+    display: grid;
+    grid-template-columns:
+        76px
+        82px
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+    gap: 8px;
+}
+
+.weapon-attribute-field input,
+.weapon-encumbrance-field input {
+    text-align: center;
+}
+
+/*
+   weapon-preset-summary — это <summary> внутри общего
+   сворачиваемого блока. Без этих правил глобальный стиль
+   .collapsible summary делает кнопку огромной, uppercase
+   и добавляет справа символ «−».
+*/
+.weapon-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.weapon-action-button,
+.collapsible .weapon-preset-picker > .weapon-preset-summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 14px;
+
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: none;
+    letter-spacing: normal;
+
+    color: #333;
+    background: #eee;
+
+    border: 1px solid #ccc;
+    border-radius: 9px;
+
+    cursor: pointer;
+}
+
+.collapsible .weapon-preset-picker > .weapon-preset-summary::after {
+    content: none !important;
+    display: none !important;
+}
+
+.collapsible[open] .weapon-preset-picker > .weapon-preset-summary,
+.collapsible[open] .weapon-preset-picker[open] > .weapon-preset-summary {
+    border-bottom: 1px solid #ccc;
+}
+
+.weapon-preset-picker {
+    width: auto;
+}
+
+@media (max-width: 620px) {
+    /*
+       На телефоне оставляем маленькие поля Хар./Нагрузка,
+       а остальные три характеристики получают равную ширину.
+    */
+    .weapon-stats-grid {
+        grid-template-columns:
+            58px
+            68px
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+        gap: 6px;
+    }
+
+    .weapon-stats-grid label {
+        font-size: 10px;
+    }
+
+    .weapon-actions {
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .weapon-action-button,
+    .weapon-preset-picker,
+    .collapsible .weapon-preset-picker > .weapon-preset-summary {
+        width: auto;
+    }
+}
+
+@media (max-width: 430px) {
+    /*
+       На очень узком экране разбиваем параметры на две строки,
+       иначе пять колонок становятся слишком тесными.
+    */
+    .weapon-stats-grid {
+        grid-template-columns:
+            58px
+            68px
+            minmax(0, 1fr);
+    }
+
+    .weapon-stats-grid > .field:nth-child(4),
+    .weapon-stats-grid > .field:nth-child(5) {
+        grid-column: auto;
+    }
+}

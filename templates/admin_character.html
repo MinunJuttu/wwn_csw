@@ -105,25 +105,27 @@
             </div>
         </section>
 
-        <section class="admin-sheet-section">
-            <h2>Оружие</h2>
-            <div class="admin-record-list">
-                {{range .Sheet.Weapons}}
-                    {{if or .Name .HitBonus .Damage .Range .SpecialShock}}
-                        <div class="admin-record-card">
-                            <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
-                            <div class="admin-record-meta">
-                                {{if .HitBonus}}Атака: {{.HitBonus}}{{end}}
-                                {{if .Damage}} · Урон: {{.Damage}}{{end}}
-                                {{if .Range}} · Дальность: {{.Range}}{{end}}
-                            </div>
-                            {{if .SpecialShock}}<p>{{.SpecialShock}}</p>{{end}}
-                        </div>
-                    {{end}}
-                {{end}}
-            </div>
-            {{if .Sheet.Ammunition}}<div class="admin-readonly-note"><strong>Боеприпасы:</strong> {{.Sheet.Ammunition}}</div>{{end}}
-        </section>
+<section class="admin-sheet-section">
+    <h2>Оружие</h2>
+    <div class="admin-record-list">
+        {{range .Sheet.Weapons}}
+            {{if or .Name .Attribute .Encumbrance .HitBonus .Damage .Range .SpecialShock}}
+                <div class="admin-record-card">
+                    <strong>{{if .Name}}{{.Name}}{{else}}Без названия{{end}}</strong>
+                    <div class="admin-record-meta">
+                        {{if .Attribute}}Хар.: {{.Attribute}}{{end}}
+                        {{if .Encumbrance}} · Нагрузка: {{.Encumbrance}}{{end}}
+                        {{if .HitBonus}} · Атака: {{.HitBonus}}{{end}}
+                        {{if .Damage}} · Урон: {{.Damage}}{{end}}
+                        {{if .Range}} · Дальность: {{.Range}}{{end}}
+                    </div>
+                    {{if .SpecialShock}}<p>{{.SpecialShock}}</p>{{end}}
+                </div>
+            {{end}}
+        {{end}}
+    </div>
+    {{if .Sheet.Ammunition}}<div class="admin-readonly-note"><strong>Боеприпасы:</strong> {{.Sheet.Ammunition}}</div>{{end}}
+</section>
 
         <section class="admin-sheet-section">
             <h2>Черты</h2>

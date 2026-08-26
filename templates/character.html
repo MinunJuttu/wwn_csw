@@ -16,10 +16,14 @@
         href="/static/css/style.css"
     >
     <script
+        src="/static/js/weapon_reference.js"
+        defer
+    ></script>
+
+    <script
         src="/static/js/character.js"
         defer
-    >
-    </script>
+    ></script>
 </head>
 
 
@@ -884,98 +888,173 @@
                 ОРУЖИЕ
             </summary>
 
-
             <div class="collapsible-content">
 
+                <div class="weapon-toolbar">
 
-                <div class="repeat-list">
+                    <div class="weapon-actions">
 
+                        <button
+                            id="add-weapon"
+                            class="add-entry-button weapon-action-button"
+                            type="button"
+                        >
+                            + Добавить оружие
+                        </button>
+
+                        <details
+                            id="weapon-preset-picker"
+                            class="weapon-preset-picker"
+                        >
+                            <summary class="add-entry-button weapon-preset-summary">
+                                + Добавить стандартное
+                            </summary>
+
+                            <div
+                                id="weapon-preset-menu"
+                                class="weapon-preset-menu"
+                            ></div>
+                        </details>
+
+                    </div>
+
+                    <button
+                        id="weapon-help-button"
+                        class="weapon-help-button"
+                        type="button"
+                        title="Справка по оружию"
+                        aria-label="Справка по оружию"
+                    >
+                        ?
+                    </button>
+
+                </div>
+
+                <div
+                    id="weapons-list"
+                    class="weapon-list"
+                >
 
                     {{range $i, $weapon := .Sheet.Weapons}}
 
+                        <div class="weapon-card dynamic-entry">
 
-                        <div class="weapon-row">
+                            <div class="weapon-card-header">
 
+                                <div class="field">
+                                    <label>
+                                        Название
+                                    </label>
 
-                            <input
-                                class="weapon-name"
-                                name="weapon_name_{{$i}}"
-                                type="text"
-                                value="{{$weapon.Name}}"
-                                placeholder="Оружие"
-                            >
+                                    <input
+                                        name="weapon_name_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.Name}}"
+                                        placeholder="Название оружия"
+                                    >
+                                </div>
 
+                                <button
+                                    class="remove-entry-button"
+                                    type="button"
+                                    title="Удалить оружие"
+                                    aria-label="Удалить оружие"
+                                >
+                                    ×
+                                </button>
 
-                            <div class="weapon-stats">
+                            </div>
 
+                            <div class="weapon-stats-grid">
 
-                                <label>
+                                <div class="field weapon-attribute-field">
+                                    <label>
+                                        Хар.
+                                    </label>
 
-                                    <span>
+                                    <input
+                                        name="weapon_attribute_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.Attribute}}"
+                                        placeholder="СИЛ"
+                                        maxlength="12"
+                                    >
+                                </div>
+
+                                <div class="field weapon-encumbrance-field">
+                                    <label>
+                                        Нагрузка
+                                    </label>
+
+                                    <input
+                                        name="weapon_encumbrance_{{$i}}"
+                                        type="text"
+                                        value="{{$weapon.Encumbrance}}"
+                                        placeholder="1"
+                                        maxlength="8"
+                                    >
+                                </div>
+
+                                <div class="field">
+                                    <label>
                                         Бонус атаки
-                                    </span>
+                                    </label>
 
                                     <input
                                         name="weapon_hit_{{$i}}"
                                         type="text"
                                         value="{{$weapon.HitBonus}}"
+                                        placeholder="+0"
                                     >
+                                </div>
 
-                                </label>
-
-
-                                <label>
-
-                                    <span>
+                                <div class="field">
+                                    <label>
                                         Урон
-                                    </span>
+                                    </label>
 
                                     <input
                                         name="weapon_damage_{{$i}}"
                                         type="text"
                                         value="{{$weapon.Damage}}"
+                                        placeholder="1d8"
                                     >
+                                </div>
 
-                                </label>
-
-
-                                <label>
-
-                                    <span>
+                                <div class="field">
+                                    <label>
                                         Дальность
-                                    </span>
+                                    </label>
 
                                     <input
                                         name="weapon_range_{{$i}}"
                                         type="text"
                                         value="{{$weapon.Range}}"
                                     >
-
-                                </label>
-
+                                </div>
 
                             </div>
 
+                            <div class="field weapon-special-field">
+                                <label>
+                                    Shock / особые свойства
+                                </label>
 
-                            <input
-                                name="weapon_special_{{$i}}"
-                                type="text"
-                                value="{{$weapon.SpecialShock}}"
-                                placeholder="Shock / особые свойства"
-                            >
-
+                                <input
+                                    name="weapon_special_{{$i}}"
+                                    type="text"
+                                    value="{{$weapon.SpecialShock}}"
+                                    placeholder="Shock, теги и другие свойства"
+                                >
+                            </div>
 
                         </div>
 
-
                     {{end}}
-
 
                 </div>
 
-
-                <div class="field">
-
+                <div class="field weapon-ammunition-field">
                     <label>
                         Боеприпасы
                     </label>
@@ -985,14 +1064,11 @@
                         type="text"
                         value="{{.Sheet.Ammunition}}"
                     >
-
                 </div>
-
 
             </div>
 
         </details>
-
 
 
 <!-- =========================================
@@ -1081,7 +1157,7 @@
                 Нажми слева, чтобы затемнить недоступную ячейку
             </span>
             <label class="inventory-max">
-                <span>Макс. (знач. СИЛА/2)</span>
+                <span>Макс. (СИЛА/2 с окр. в меньшую сторону)</span>
                 <input
                     name="readied_max_load"
                     type="text"
@@ -1148,7 +1224,7 @@
                 Нажми слева, чтобы затемнить недоступную ячейку
             </span>
             <label class="inventory-max">
-                <span>Макс. (знач. СИЛА)</span>
+                <span>Макс. (значение СИЛА)</span>
                 <input
                     name="stowed_max_load"
                     type="text"
@@ -1625,6 +1701,155 @@
 </div>
     </form>
 </main>
+
+<!-- =========================================
+     ШАБЛОН НОВОГО ОРУЖИЯ
+========================================== -->
+<template id="weapon-template">
+    <div class="weapon-card dynamic-entry">
+
+        <div class="weapon-card-header">
+
+            <div class="field">
+                <label>
+                    Название
+                </label>
+
+                <input
+                    name="weapon_name___INDEX__"
+                    type="text"
+                    placeholder="Название оружия"
+                >
+            </div>
+
+            <button
+                class="remove-entry-button"
+                type="button"
+                title="Удалить оружие"
+                aria-label="Удалить оружие"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="weapon-stats-grid">
+
+            <div class="field weapon-attribute-field">
+                <label>
+                    Хар.
+                </label>
+
+                <input
+                    name="weapon_attribute___INDEX__"
+                    type="text"
+                    placeholder="СИЛ"
+                    maxlength="12"
+                >
+            </div>
+
+            <div class="field weapon-encumbrance-field">
+                <label>
+                    Нагрузка
+                </label>
+
+                <input
+                    name="weapon_encumbrance___INDEX__"
+                    type="text"
+                    placeholder="1"
+                    maxlength="8"
+                >
+            </div>
+
+            <div class="field">
+                <label>
+                    Бонус атаки
+                </label>
+
+                <input
+                    name="weapon_hit___INDEX__"
+                    type="text"
+                    placeholder="+0"
+                >
+            </div>
+
+            <div class="field">
+                <label>
+                    Урон
+                </label>
+
+                <input
+                    name="weapon_damage___INDEX__"
+                    type="text"
+                    placeholder="1d8"
+                >
+            </div>
+
+            <div class="field">
+                <label>
+                    Дальность
+                </label>
+
+                <input
+                    name="weapon_range___INDEX__"
+                    type="text"
+                >
+            </div>
+
+        </div>
+
+        <div class="field weapon-special-field">
+            <label>
+                Shock / особые свойства
+            </label>
+
+            <input
+                name="weapon_special___INDEX__"
+                type="text"
+                placeholder="Shock, теги и другие свойства"
+            >
+        </div>
+
+    </div>
+</template>
+
+
+<!-- =========================================
+     СПРАВКА ПО ОРУЖИЮ
+========================================== -->
+<dialog
+    id="weapon-help-dialog"
+    class="weapon-help-dialog"
+>
+    <div class="weapon-help-header">
+        <h2>
+            Справка по оружию
+        </h2>
+
+        <button
+            class="weapon-help-close-icon"
+            type="button"
+            data-close-dialog
+            aria-label="Закрыть справку"
+        >
+            ×
+        </button>
+    </div>
+
+    <div
+        id="weapon-help-content"
+        class="weapon-help-content"
+    ></div>
+
+    <button
+        class="weapon-help-close-button"
+        type="button"
+        data-close-dialog
+    >
+        Закрыть
+    </button>
+</dialog>
+
 
 <!-- =========================================
      ШАБЛОН НОВОГО ЗАКЛИНАНИЯ
