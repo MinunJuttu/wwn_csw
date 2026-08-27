@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Мастерский стол — WWN</title>
     <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/admin_table.css">
     <script src="/static/js/admin.js" defer></script>
 </head>
 <body class="admin-table-page">
@@ -16,69 +17,69 @@
 
     <main class="admin-table-desktop">
         <header class="admin-table-topbar">
-            <div>
+            <div class="gm-table-heading">
                 <a class="admin-back-link" href="/admin">← Админка</a>
                 <h1>Мастерский стол</h1>
             </div>
-            <a class="admin-ghost-button" href="/admin/characters">Список персонажей</a>
+
+            <div class="gm-table-top-controls">
+                <div class="gm-noise-control">
+                    <label for="gm-noise-level">Уровень шума</label>
+                    <input
+                        id="gm-noise-level"
+                        type="number"
+                        step="1"
+                        inputmode="numeric"
+                        value="0"
+                        aria-label="Уровень шума"
+                    >
+                    <details class="gm-help-popover" id="gm-noise-help">
+                        <summary
+                            class="gm-help-button"
+                            title="Справка об уровне шума"
+                            aria-label="Справка об уровне шума"
+                        >?</summary>
+                        <div class="gm-help-popover__content">
+    <p>
+        Для случайных встреч мастер делает бросок d6 для дня и ночи.
+        При результате 1 игроков ждёт случайная встреча.
+    </p>
+
+    <p>
+        Однако шум, производимый отрядом игроков, может влиять на это.
+        Каждый +n уровня шума повышает необходимый результат на n,
+        делая случайные встречи всё более и более вероятными.
+    </p>
+
+    <ul>
+        <li>Отряд передвинулся на один гекс пешком, без бега и грохота телег — <strong>+1 шума</strong></li>
+        <li>Бег, грохот, быстрые перемещения — <strong>+2 шума</strong></li>
+        <li>Действие «Фуражировка» — <strong>+1 шума</strong></li>
+        <li>Исследование гекса — <strong>+1 шума</strong></li>
+        <li>Плохая погода (дождь, снегопад и т. д.) уменьшает шум на <strong>−1</strong></li>
+        <li>Сражения отряда повышают уровень шума от <strong>+0 до +2</strong></li>
+        <li>Скрытные перемещения отряда не повышают уровень шума — <strong>+0</strong></li>
+        <li>Если отряд решает не перемещаться несколько часов и сознательно затаиться, шум уменьшается на <strong>−1</strong></li>
+        <li>В целом громкое поведение отряда, крики и споры — <strong>+1</strong></li>
+    </ul>
+</div>
+                    </details>
+                </div>
+
+                <div class="gm-slot-controls" aria-label="Управление полями персонажей">
+                    <button id="gm-add-slot" class="admin-ghost-button" type="button">
+                        + Добавить поле персонажа
+                    </button>
+                    <button id="gm-remove-slot" class="admin-ghost-button" type="button">
+                        − Удалить поле персонажа
+                    </button>
+                </div>
+
+                <a class="admin-ghost-button" href="/admin/characters">Список персонажей</a>
+            </div>
         </header>
 
-        <section class="gm-desk" id="gm-desk">
-            <div class="gm-slot" data-slot="0">
-                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
-                <div class="gm-slot-filled" hidden>
-                    <header class="gm-slot-header">
-                        <div class="gm-slot-title"></div>
-                        <button class="gm-slot-remove" type="button">Убрать</button>
-                    </header>
-                    <iframe class="gm-slot-frame" title="Персонаж 1"></iframe>
-                </div>
-            </div>
-
-            <div class="gm-slot" data-slot="1">
-                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
-                <div class="gm-slot-filled" hidden>
-                    <header class="gm-slot-header">
-                        <div class="gm-slot-title"></div>
-                        <button class="gm-slot-remove" type="button">Убрать</button>
-                    </header>
-                    <iframe class="gm-slot-frame" title="Персонаж 2"></iframe>
-                </div>
-            </div>
-
-            <div class="gm-slot" data-slot="2">
-                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
-                <div class="gm-slot-filled" hidden>
-                    <header class="gm-slot-header">
-                        <div class="gm-slot-title"></div>
-                        <button class="gm-slot-remove" type="button">Убрать</button>
-                    </header>
-                    <iframe class="gm-slot-frame" title="Персонаж 3"></iframe>
-                </div>
-            </div>
-
-            <div class="gm-slot" data-slot="3">
-                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
-                <div class="gm-slot-filled" hidden>
-                    <header class="gm-slot-header">
-                        <div class="gm-slot-title"></div>
-                        <button class="gm-slot-remove" type="button">Убрать</button>
-                    </header>
-                    <iframe class="gm-slot-frame" title="Персонаж 4"></iframe>
-                </div>
-            </div>
-
-            <div class="gm-slot" data-slot="4">
-                <button class="gm-slot-empty" type="button">+ Выбрать персонажа</button>
-                <div class="gm-slot-filled" hidden>
-                    <header class="gm-slot-header">
-                        <div class="gm-slot-title"></div>
-                        <button class="gm-slot-remove" type="button">Убрать</button>
-                    </header>
-                    <iframe class="gm-slot-frame" title="Персонаж 5"></iframe>
-                </div>
-            </div>
-        </section>
+        <section class="gm-desk" id="gm-desk" aria-live="polite"></section>
     </main>
 
     <dialog id="character-picker" class="character-picker">
@@ -96,17 +97,17 @@
 
         <div class="character-picker-list" id="character-picker-list">
             {{range .Characters}}
-                <button
-                    class="character-picker-item"
-                    type="button"
-                    data-character-id="{{.ID}}"
-                    data-character-name="{{.Name}}"
-                    data-character-owner="{{.OwnerUsername}}"
-                    data-character-level="{{.Level}}"
-                >
-                    <strong>{{.Name}}</strong>
-                    <span>{{.OwnerUsername}} · уровень {{.Level}}</span>
-                </button>
+            <button
+                class="character-picker-item"
+                type="button"
+                data-character-id="{{.ID}}"
+                data-character-name="{{.Name}}"
+                data-character-owner="{{.OwnerUsername}}"
+                data-character-level="{{.Level}}"
+            >
+                <strong>{{.Name}}</strong>
+                <span>{{.OwnerUsername}} · уровень {{.Level}}</span>
+            </button>
             {{end}}
         </div>
     </dialog>
