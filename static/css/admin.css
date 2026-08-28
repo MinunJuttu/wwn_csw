@@ -52,6 +52,7 @@ a {
 .admin-topbar h1,
 .admin-table-topbar h1 {
     margin: 4px 0 0;
+    font-size: 20px;
 }
 
 .admin-eyebrow {
@@ -495,11 +496,8 @@ a {
 }
 
 .admin-table-topbar {
+    align-items: flex-start;
     min-height: 64px;
-}
-
-.admin-table-topbar h1 {
-    font-size: 20px;
 }
 
 .gm-desk {
@@ -691,10 +689,6 @@ a {
 
 /* Дополнительные стили только для вкладки "Мастерский стол". */
 
-.admin-table-topbar {
-    align-items: flex-start;
-}
-
 .gm-table-heading {
     flex: 0 0 auto;
 }
@@ -766,7 +760,7 @@ a {
     background: #f2f2f2;
 }
 
-.gm-help-popover-content {
+.gm-help-popover__content {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
